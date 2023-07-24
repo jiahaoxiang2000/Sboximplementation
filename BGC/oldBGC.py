@@ -4,20 +4,6 @@ import threading
 from datetime import datetime
 import inspect
 import ctypes
-
-cipher = ["PROST", "PICCOLO", "PICCOLO-1", "LBlock", "RECTANGLE", "RECTANGLE-1", "Keccak"]
-cipherSbox = [
-    [0, 4, 8, 15, 1, 5, 14, 9, 2, 7, 10, 12, 11, 13, 6, 3],  # PROST
-    [14, 4, 11, 2, 3, 8, 0, 9, 1, 10, 7, 15, 6, 12, 5, 13],  # picoolo
-    [6, 8, 3, 4, 1, 14, 12, 10, 5, 7, 9, 2, 13, 15, 0, 11],  # picoolo-1
-    [14, 9, 15, 0, 13, 4, 10, 11, 1, 2, 8, 3, 7, 6, 12, 5],  # lblock
-    [6, 5, 12, 10, 1, 14, 7, 9, 11, 0, 3, 13, 8, 15, 4, 2],  ##rectangle
-    [9, 4, 15, 10, 14, 1, 0, 6, 12, 7, 3, 8, 2, 11, 5, 13],  # rectangle-1
-    [0, 5, 10, 11, 20, 17, 22, 23, 9, 12, 3, 2, 13, 8, 15, 14, 18, 21, 24, 27, 6, 1, 4, 7, 26, 29, 16, 19, 30, 25, 28,
-     31],  # keccak
-]
-bgc = [8, 10, 10, 11, 12, 12, 13] #S-box's BGC of cipher
-BN = [4, 4, 4, 4, 4, 4, 5] #number of S-box inputs
 A = [[0 for i in range(256)] for j in range(8)]
 
 
@@ -215,34 +201,36 @@ def Objective(fout):
     fout.write("QUERY(FALSE);\nCOUNTEREXAMPLE;\n")
 
 if __name__ == '__main__':
-    for i in range(1):#(len(cipher)):
-        Cipherstr = cipher[i] #ciphername
-        bitnum = BN[i] #number of S-box inputs
-        GateNum = bgc[i] #number of gates
-        Size = pow(2, bitnum) #2^n length 
-        Sbox = cipherSbox[i] #S-box
-        QNum = 2 * GateNum  #total number of 2-input gates' inputs 
+    Cipherstr = "PROST"
+    Sbox = [0, 4, 8, 15, 1, 5, 14, 9, 2, 7, 10, 12, 11, 13, 6, 3]  # PROST
+    BGC = 8  # number of gate
+    bitnum = 4
+    for GateNum in range(BGC,1,-1):
+        Size = pow(2, bitnum) #2^n length
+        QNum = 2 * GateNum  #total number of 2-input gates' inputs
         aNum = (2 * bitnum + GateNum - 1) * GateNum  + bitnum * bitnum + GateNum * bitnum #number of variate A
         bNum = 3 * GateNum #number of variate B
 
-        filestr = Cipherstr+"oldbgc"  #encoding modle to file
+        filestr = "./bgc/"+Cipherstr+"/"+Cipherstr+"oldbgc"  #encoding modle to file
         fout=open(filestr + ".cvc", 'w')
         State_Variate(fout, aNum,bitnum, Size, GateNum, QNum, bNum) #define Variate X, Y A, B, T, Q
         Trival_Constraint(fout, aNum,bitnum, Size, GateNum, QNum, bNum, Sbox)#Constraints of X, Y A, B, T, Q
         Logic_Constraint(fout, bitnum, Size, GateNum, QNum, bNum) #Encoding of gates' inputs and outputs, S-box outputs
         Objective(fout)
-        fout.close()        
+        fout.close()
 
-        order="stp -p ./"+str(filestr)+".cvc --cryptominisat --threads 1 "#> "+filestr+".txt " # command: cvc to cnf for cryptominisat
-    
+        order="stp -p "+str(filestr)+".cvc --cryptominisat --threads 8"#> "+filestr+".txt " # command: cvc to cnf for cryptominisat
+
         start_time = time.time()
-        
-        os.system(order)#Execute the command to solve
-        #s=(os.popen(order)) #s is solve
+
+        #os.system(order)#Execute the command to solve
+        s=(os.popen(order)) #s is solve
         end_time = time.time()
-        fouts=open(filestr+".txt",'a+')
-        #fouts.write(str(s.read()))
+        print(s.read())
+
+        s0=(os.popen("rm -f "+filestr+".cvc")) #s is solve
+        fouts=open(filestr+str(GateNum)+".txt",'a+')
+        fouts.write(str(s.read()))
         fouts.write("searchtime:"+str((end_time - start_time)*1000))
         fouts.close()
         print("finsh",filestr, float(end_time - start_time) * 1000.0,"ms")
-
