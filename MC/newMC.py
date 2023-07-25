@@ -306,6 +306,10 @@ if __name__ == '__main__':
                 result = 0
                 SS = SStr0[d]
                 print(SS)
+                if not os.path.exists("./mc"):
+                    os.system("mkdir ./mc")
+                if not os.path.exists("./mc/"+Cipherstr):
+                    os.system("mkdir ./mc/"+Cipherstr)
                 filestr = "./mc/" + Cipherstr + "/" + Cipherstr + "newmc_D" + str(depth)
                 fout = open(filestr + "0.cvc", 'w')
                 State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS)
