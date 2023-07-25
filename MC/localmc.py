@@ -302,13 +302,13 @@ if __name__ == '__main__':
                 strz=""
                 for yy0 in range(len(yy[y0])):
                     strz=strz+str(yy[y0][yy0])
-                if not os.path.exists("./mc"):
-                    os.system("mkdir ./mc")
-                if not os.path.exists("./mc/"+Cipherstr):
-                    os.system("mkdir ./mc/"+Cipherstr)
-                if not os.path.exists("./mc/"+Cipherstr+"/11"):
-                    os.system("mkdir ./mc/"+Cipherstr+"/11")
-                filestr = "./mc/"+Cipherstr+"/11/"+Cipherstr+"LocalMC"+str(GateNum)+strz
+                if not os.path.exists("./localmc"):
+                    os.system("mkdir ./localmc")
+                if not os.path.exists("./localmc/"+Cipherstr):
+                    os.system("mkdir ./localmc/"+Cipherstr)
+                if not os.path.exists("./localmc/"+Cipherstr+"/11"):
+                    os.system("mkdir ./localmc/"+Cipherstr+"/11")
+                filestr = "./localmc/"+Cipherstr+"/11/"+Cipherstr+"LocalMC"+str(GateNum)+strz
                 fout=open(filestr + ".cvc", 'w')
                 SS=SStr0[d]
                 print(SS)
@@ -328,7 +328,7 @@ if __name__ == '__main__':
                 # print(result)
                 while (x):
                     # print(result)
-                    order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 8 "#> " + filestr + ".txt "
+                    order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 1 "#> " + filestr + ".txt "
                     # print(order)
                     start_time = time.time()
                     # print(i,start_time)
@@ -364,7 +364,7 @@ if __name__ == '__main__':
                                     ttstr.append(int(s0[3], 16))
                                 if len(s0) > 2 and "T_" in s0[1]:
                                     AAstr.append("".join(s0))
-                        fstr = "./mc/"+Cipherstr+"/11/" + Cipherstr+str(GateNum)+strz
+                        fstr = "./localmc/"+Cipherstr+"/11/" + Cipherstr+str(GateNum)+strz
                         foutc = open(fstr + ".txt", 'a+')
                         foutc.write(s)
                         foutc.close()
@@ -376,9 +376,10 @@ if __name__ == '__main__':
                         if len(Astr) > 0:
                             ttstr.sort()
                             if ttstr not in tttstr:
-                                filestr1 = "./fjy/mc/"+Cipherstr+"/11/" + str(GateNum)+strz
+                                filestr1 = "./localmc/"+Cipherstr+"/11/" + str(GateNum)+strz
                                 fout1 = open(filestr1 + ".txt", 'a+')
                                 fout1.write("\n".join(AAstr) + "\n\n")
+                                fout1.close()
                                 tttstr.append(ttstr)
                             f = open(filestr + ".cvc", 'r')
                             lines = []
@@ -398,7 +399,6 @@ if __name__ == '__main__':
                             f = open(filestr + ".cvc", 'w')
                             f.write(s)
                             f.close()
-                            fout1.close()
                     else:
 
                         print(os.system("rm -f "+filestr+".cvc"))
