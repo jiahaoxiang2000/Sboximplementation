@@ -203,7 +203,7 @@ def Objective(fout):
 if __name__ == '__main__':
     Cipherstr = "PROST"
     Sbox = [0, 4, 8, 15, 1, 5, 14, 9, 2, 7, 10, 12, 11, 13, 6, 3]  # PROST
-    BGC = 8  # number of gate
+    BGC = 8  # number of gates
     bitnum = 4
     for GateNum in range(BGC,1,-1):
         Size = pow(2, bitnum) #2^n length
@@ -211,7 +211,12 @@ if __name__ == '__main__':
         aNum = (2 * bitnum + GateNum - 1) * GateNum  + bitnum * bitnum + GateNum * bitnum #number of variate A
         bNum = 3 * GateNum #number of variate B
 
-        filestr = "./bgc/"+Cipherstr+"/"+Cipherstr+"oldbgc"  #encoding modle to file
+        if not os.path.exists("./oldbgc"):
+            os.system("mkdir ./oldbgc")
+        if not os.path.exists("./oldbgc/" + Cipherstr):
+            os.system("mkdir ./oldbgc/" + Cipherstr)
+
+        filestr = "./oldbgc/"+Cipherstr+"/"+Cipherstr+"oldbgc"  #encoding modle to file
         fout=open(filestr + ".cvc", 'w')
         State_Variate(fout, aNum,bitnum, Size, GateNum, QNum, bNum) #define Variate X, Y A, B, T, Q
         Trival_Constraint(fout, aNum,bitnum, Size, GateNum, QNum, bNum, Sbox)#Constraints of X, Y A, B, T, Q
@@ -219,7 +224,7 @@ if __name__ == '__main__':
         Objective(fout)
         fout.close()
 
-        order="stp -p "+str(filestr)+".cvc --cryptominisat --threads 8"#> "+filestr+".txt " # command: cvc to cnf for cryptominisat
+        order="stp -p "+str(filestr)+".cvc --cryptominisat --threads 1"#> "+filestr+".txt " # command: cvc to cnf for cryptominisat
 
         start_time = time.time()
 
