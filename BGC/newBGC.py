@@ -326,4 +326,5 @@ if __name__ == '__main__':
                             s = line.split()
                             if filestr+"0.cvc" in s or filestr+"1.cvc" in s or filestr+"2.cvc" in s:
                                 r = os.popen("kill -9 " + s[1]).read()
+                                
 
