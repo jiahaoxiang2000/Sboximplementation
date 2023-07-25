@@ -268,10 +268,7 @@ if __name__ == '__main__':
     p=0#parallel sign
     for GateNum in range(BGC,1,-1):
         result =0
-        print(GateNum)
         items=[] #part of S-box output without solution
-        bitnum = 5#BN[i] #number of S-box inputs
-        #GateNum = 4#number of gates n0 or n1
         Size = pow(2, bitnum)#2^n length
         QNum = 2 * GateNum #total number of 2-input gates' inputs
         bNum = GateNum  #number of variate B
@@ -318,13 +315,13 @@ if __name__ == '__main__':
                     for yy0 in range(len(yy[y0])):
                         strz=strz+str(yy[y0][yy0])
                     print(d,Cipherstr,SS)
-                    if not os.path.exists("./bgc"):
-                        os.system("mkdir ./bgc")
-                    if not os.path.exists("./bgc/"+Cipherstr):
-                        os.system("mkdir ./bgc/"+Cipherstr)
-                    if not os.path.exists("./bgc/"+Cipherstr+"/11"):
-                        os.system("mkdir ./bgc/"+Cipherstr+"/11")
-                    filestr = "./bgc/"+Cipherstr+"/11/"+Cipherstr+"LocalBGC"+str(GateNum)+strz #encoding modle to file
+                    if not os.path.exists("./localbgc"):
+                        os.system("mkdir ./localbgc")
+                    if not os.path.exists("./localbgc/"+Cipherstr):
+                        os.system("mkdir ./localbgc/"+Cipherstr)
+                    if not os.path.exists("./localbgc/"+Cipherstr+"/11"):
+                        os.system("mkdir ./localbgc/"+Cipherstr+"/11")
+                    filestr = "./localbgc/"+Cipherstr+"/11/"+Cipherstr+"LocalBGC"+str(GateNum)+strz #encoding modle to file
                     fout=open(filestr + ".cvc", 'w')
                     State_Variate(fout, bitnum, Size, GateNum, QNum, bNum,n0,TTstr)  #define Variate X, Y, B, T, Q
                     Trival_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, Sbox,n0,yy[y0],constr) #Constraints of X, Y, B, T, Q
@@ -364,21 +361,17 @@ if __name__ == '__main__':
                                     ttstr.append(int(s0[3], 16))
                                 if len(s0) > 2 and "T_" in s0[1]:
                                     AAstr.append("".join(s0))
-                            fstr = "./bgc/"+Cipherstr+"/11/" + Cipherstr+str(GateNum)+strz +str(depth)
+                            fstr = "./localbgc/"+Cipherstr+"/11/" + Cipherstr+str(GateNum)+strz +str(depth)
                             foutc = open(fstr + ".txt", 'a+')
                             foutc.write(s)
                             foutc.close()
-                            # else:
-                            #    AAstr.append(s)
-                            # print(AAstr)
-                            # print(Astr)
-                            # print(Ystr)
                             if len(Astr) > 0:
                                 ttstr.sort()
                                 if ttstr not in tttstr:
-                                    filestr1 = "./bgc/"+Cipherstr+"/11/" + str(GateNum)+strz  +str(depth)
+                                    filestr1 = "./localbgc/"+Cipherstr+"/11/" + str(GateNum)+strz  +str(depth)
                                     fout1 = open(filestr1 + ".txt", 'a+')
                                     fout1.write("\n".join(AAstr) + "\n\n")
+                                    fout1.close()
                                     tttstr.append(ttstr)
                                 f = open(filestr + ".cvc", 'r')
                                 lines = []
@@ -398,9 +391,8 @@ if __name__ == '__main__':
                                 f = open(filestr + ".cvc", 'w')
                                 f.write(s)
                                 f.close()
-                                fout1.close()
                         else:
-                            filestr = "./bgc/"+Cipherstr+"/11/"+Cipherstr+"LocalBGC"+str(GateNum)+strz #encoding modle to file
+                            filestr = "./localbgc/"+Cipherstr+"/11/"+Cipherstr+"LocalBGC"+str(GateNum)+strz #encoding modle to file
                             os.system("rm -f "+ filestr+".cvc")
                             x=0
                             xx=1
