@@ -1,6 +1,6 @@
-Q0 =∼ X2, Q1 = X2 ⊕ X3, Q2 =∼ X0,
-Q7 =∼ X1, a1 = X0 ⊕ X1, T0 = Q0 ∧ Q1,
-T1 = Q2 ∧ Q0, Y3 = a1 ⊕ T0, a2 = X3 ⊕ T1,
-Q6 = Q0 ⊕ Y3, Y2 = a1 ⊕ a2, Q4 = X1 ⊕ a2,
-Q5 = Q2 ⊕ a2, T3 = Q6 ∧ Q7, T2 = Q4 ∧ Q5,
-Y1 = Q1 ⊕ T3, a3 = X0 ⊕ T2, Y0 = X2 ⊕ a3.
+Q0 =∼ X2, Q1 = X2 ^ X3, Q2 =∼ X0,
+Q7 =∼ X1, a1 = X0 ^ X1, T0 = Q0 & Q1,
+T1 = Q2 & Q0, Y3 = a1 ^ T0, a2 = X3 ^ T1,
+Q6 = Q0 ^ Y3, Y2 = a1 ^ a2, Q4 = X1 ^ a2,
+Q5 = Q2 ^ a2, T3 = Q6 & Q7, T2 = Q4 & Q5,
+Y1 = Q1 ^ T3, a3 = X0 ^ T2, Y0 = X2 ^ a3.
