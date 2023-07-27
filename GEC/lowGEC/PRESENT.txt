@@ -1,5 +1,5 @@
 T0 = MOAI1(X2, X0, X2, X0), T1 = MOAI1(X2, X0, X1, X0),
 T2 = MOAI1(T0, X1, X0, T1), T3 =∼ T2, T7 =∼ T0,
 Y2 = MOAI1(T1, X3, X3, T2), Y0 = MAOI1(X3, T1, T3, X3),
-T6 =∼ (Y2 ∧ Y0), T8 = MOAI1(X0, X1, T7, X1),
+T6 =∼ (Y2 & Y0), T8 = MOAI1(X0, X1, T7, X1),
 Y3 = MOAI1(X3, T8, T8, X3), Y1 = MOAI1(T8, T6, T8, T6).
