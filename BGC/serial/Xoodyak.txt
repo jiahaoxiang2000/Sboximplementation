@@ -1,3 +1,7 @@
-T0 = X0 ^ X2, T1 = X0 | X1, T2 = X1 & X2,
-T3 = X0 & T0, Y1 = X1 ^ T3, Y0 = T0 ^ T2,
-Y2 = T0 ^ T1.
+Y2 = X0 ^ X2, Y1 = X1 ^ (X0 & Y2), Y0 = Y2 ^ (X1 & X2),
+Y2 = Y2 ^ (X0 | X1).
+
+Y2 = X0 ^ X2,   		1 ancilla qubits
+Y1 = X1 ^ (X0 & Y2), 	1 ancilla qubits
+Y0 = Y2 ^ (X1 & X2),	1 ancilla qubits
+Y2 = Y2 ^ (X0 | X1).
