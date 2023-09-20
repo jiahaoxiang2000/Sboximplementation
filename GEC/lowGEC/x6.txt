@@ -1,5 +1,15 @@
-t0=~x1,	t3=~x3,	t6=~x5,
-t1=~(t0&x2),	t4=~(t3&x4),	t7=~(t6&x6),
-y0=MOAI1(t1,x0,t1,x0),	y2=MOAI1(t4,x2,t4,x2),	y4=MOAI1(t7,x4,t7,x4),
-t2=t0|x0,	t5=t0|x2,	t8=t0|x4,
-y5=MOAI(t2,x5,t2,x5),	y1=MOAI(t5,x1,t5,x1),	y3=MOAI(t8,x3,t8,x3).
+X5 = ~X5
+Y4 = ~(X5 & X0)				1
+Y4 = MOAI1(Y4, X4, Y4, X4)
+Y3 = X5 | X4				1
+Y3 = MOAI1(Y3, X3, Y3, X3)
+X3 = ~X3
+Y2 = ~(X3 & X4)				1
+Y2 = MOAI1(Y2, X2, Y2, X2)
+Y1 = X3 | X2				1
+Y1 = MOAI1(Y1, X1, Y1, X1)
+X1 = ~X1
+Y0 = ~(X1 & X2)				1
+Y0 = MOAI1(Y0, X0, Y0, X0)
+Y5 = X1 | X0				1
+Y5 = MAOI1(Y5, X5, Y5, X5)
