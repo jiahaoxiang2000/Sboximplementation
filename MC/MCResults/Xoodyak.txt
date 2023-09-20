@@ -1,3 +1,15 @@
-Q1 = X0 ^ X1, T0 =∼ X1 & Q1, Q3 =∼ X2 ^ Q1,
-T2 =∼ X2 & X0, a0 = T0 ^ X2, T1 = X1 & Q3,
-Y1 = X1 ^ T2, Y0 = T1 ^ a0, Y2 = a0 ^ Q1.
+Y1 =~ X2 & X0, X0 = X0 ^ X1, Y2 =~ X1 & X0, 
+Y2 = Y2 ^ X2, X2 =~ X2 ^ X0,Y0 = X1 & X2,
+Y1 = X1 ^ Y1, Y0 = Y0 ^ Y2, Y2 = Y2 ^ X0.
+
+
+
+Y1 =~ X2 & X0, 1 ancilla qubits
+X0 = X0 ^ X1, 
+Y2 =~ X1 & X0, 1 ancilla qubits
+Y2 = Y2 ^ X2, 
+X2 =~ X2 ^ X0,
+Y0 = X1 & X2,  1 ancilla qubits
+Y1 = X1 ^ Y1, 
+Y0 = Y0 ^ Y2, 
+Y2 = Y2 ^ X0.
