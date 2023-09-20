@@ -1,6 +1,12 @@
-T0 = MOAI1(X2, X1, X3, X1), T1 =∼ (X3),
-T2 =∼ X2, T3 = MOAI1(T2, X0, T0, X0),
-Y3 = MOAI1(X2, X1, X3, T3), T5 =∼ (Y3 | T1),
-Y2 = MOAI1(T3, T5, T0, X2), T7 = MOAI1(T2, X3, T0, T0),
-T8 = MOAI1(X1, T5, T2, T1), T9 = MOAI1(Y2, T1, Y2, T1),
-Y0 = MOAI1(X0, T8, T7, T9), Y1 = MOAI1(T2, T9, T8, X0).
+m0 = MOAI1(X3, X1, X2, X1)  3
+m1 = ~X2					1
+m2 = MOAI1(m0, X0,m1, X0 )  3
+Y3 = MOAI1(X3, m2, X2, X1)  3
+m3 = MOAI1(m0, m0, m1, X3)  2
+X3 = ~(X3)
+m4 = ~(Y3 | X3)				1
+Y2 = MOAI1(m0, X2, m2, m4)  3
+m5 = MOAI1(m1, X3, X1, m4)  3
+X3 = MOAI1(Y2, X3, Y2, X3)
+Y0 = MOAI1(m3, X3, X0, m5)  3
+Y1 = MOAI1(m5, X0, m1, X3)  3
