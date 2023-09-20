@@ -1,0 +1,14 @@
+m0=	~(X0^X1^X2), 
+Y2=	MOAI(X2,X0,m0,X0), 
+Y1=	MOAI(X1,X2,X2,m0), 
+Y0=	MOAI(X0,X1,X1,m0).
+
+
+m0=MOAII(a,b,c,d)=~(~(a&b))&(c|d))=~(m00&m01),  3 ancilla qubits
+m0=MOAII(a,b,a,b)=~(~(a&b))&(a|b))=~(a^b),  1 ancilla qubits
+
+quantum
+m0=	~(X0^X1^X2),  1 ancilla qubits
+Y2=	MOAI(X2,X0,m0,X0), 3 ancilla qubits
+Y1=	MOAI(X1,X2,X2,m0), 3 ancilla qubits
+Y0=	MOAI(X0,X1,X1,m0). 3 ancilla qubits
