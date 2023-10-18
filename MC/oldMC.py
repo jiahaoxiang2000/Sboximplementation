@@ -4,6 +4,7 @@ import threading
 from datetime import datetime
 import inspect
 import ctypes
+
 A = [[0 for i in range(256)] for j in range(8)]
 
 resstr = ""
@@ -65,7 +66,7 @@ def Decompose(flag, Sbox):
             tem = i
         else:
             tem = Sbox[i]
-        for j in range(bitnum - 1, -1, -1):
+        for j in range(inputBitNum - 1, -1, -1):
             A[j][i] = tem % 2
             tem //= 2
 
@@ -160,37 +161,37 @@ def Objective(fout):
 
 
 if __name__ == '__main__':
-    Cipherstr = "PROST"# ciphername
-    Sbox = [0, 4, 8, 15, 1, 5, 14, 9, 2, 7, 10, 12, 11, 13, 6, 3]  # PROST# S-box
+    CipherStr = "craft"  # cipher name
+    Sbox = [12, 10, 13, 3, 14, 11, 15, 7, 8, 9, 1, 5, 0, 2, 4, 6]  # craft S-box
     MC = 8  # number of AND gates
-    bitnum = 4# number of S-box inputs
-    for GateNum in range(MC,1,-1):
-        Size = pow(2, bitnum)  # 2^n length
+    inputBitNum = 4  # number of S-box inputs
+    for GateNum in range(MC, 1, -1):
+        Size = pow(2, inputBitNum)  # 2^n length
         QNum = 2 * GateNum  # total number of 2-input gates' inputs
-        aNum = (2 * (bitnum + 1) + GateNum - 1) * GateNum + bitnum * bitnum + GateNum * bitnum  # number of variate A
+        aNum = (2 * (
+                    inputBitNum + 1) + GateNum - 1) * GateNum + inputBitNum * inputBitNum + GateNum * inputBitNum  # number of variate A
         if not os.path.exists("./oldmc"):
             os.system("mkdir ./oldmc")
-        if not os.path.exists("./oldmc/" + Cipherstr):
-            os.system("mkdir ./oldmc/" + Cipherstr)
-        filestr = "./oldmc/"+Cipherstr + "/oldmc" +str(GateNum) # encoding modle to file
-        if not os.path.exists("./"+Cipherstr):
-            os.system("mkdir ./"+Cipherstr)
+        if not os.path.exists("./oldmc/" + CipherStr):
+            os.system("mkdir ./oldmc/" + CipherStr)
+        filestr = "./oldmc/" + CipherStr + "/oldmc" + str(GateNum)  # encoding modle to file
+        if not os.path.exists("./" + CipherStr):
+            os.system("mkdir ./" + CipherStr)
         fout = open(filestr + ".cvc", 'w')
-        State_Variate(fout, aNum, bitnum, Size, GateNum, QNum)  # define Variate X, Y A, T, Q
-        Trival_Constraint(fout, aNum, bitnum, Size, Sbox)  # Constraints of X, Y A, T, Q
-        Logic_Constraint(fout, bitnum, GateNum)  # Encoding of gates' inputs and outputs, S-box outputs
+        State_Variate(fout, aNum, inputBitNum, Size, GateNum, QNum)  # define Variate X, Y A, T, Q
+        Trival_Constraint(fout, aNum, inputBitNum, Size, Sbox)  # Constraints of X, Y A, T, Q
+        Logic_Constraint(fout, inputBitNum, GateNum)  # Encoding of gates' inputs and outputs, S-box outputs
         Objective(fout)
         fout.close()
 
         order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 1 "
         start_time = time.time()
 
-        #os.system(order)  # Execute the command to solve
-        s=(os.popen(order).read()) #s is solve
+        # os.system(order)  # Execute the command to solve
+        s = (os.popen(order).read())  # s is solve
         end_time = time.time()
         fouts = open(filestr + ".txt", 'a+')
         fouts.write(str(s))
         fouts.write("searchtime:" + str((end_time - start_time) * 1000))
         fouts.close()
         print("finsh", filestr, float(end_time - start_time) * 1000.0, "ms")
-

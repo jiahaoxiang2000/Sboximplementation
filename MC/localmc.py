@@ -204,7 +204,7 @@ def time_stamp1():
 
 def thread_func(t,filestr,i):
     global result
-    order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 10 "#> " + filestr + ".txt "
+    order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 18 "#> " + filestr + ".txt "
     # print(order)
     start_time = time.time()
     # print(i,start_time)
@@ -255,8 +255,8 @@ if __name__ == '__main__':
     TTstr = []  # the solution of part S-box output, its value is [T_0,T_1...]
 
     constr = []  # Exclude existing solutions realized by S-box NOT(T_0=0xf22f)
-    Cipherstr = "PROST"  # ciphername
-    Sbox = [0, 4, 8, 15, 1, 5, 14, 9, 2, 7, 10, 12, 11, 13, 6, 3]  # PROST# S-box
+    Cipherstr = "Present"  # ciphername
+    Sbox = [12, 5, 6, 11, 9, 0, 10, 13, 3, 14, 15, 8, 4, 7, 1, 2]  # PROST# S-box
     MC = 8  # number of AND gates
     bitnum = 4  # number of S-box inputs
     for GateNum in range(MC, 1, -1):

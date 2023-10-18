@@ -227,7 +227,7 @@ def time_stamp1():
 def thread_func(threads, filestr):
     global result
     global resultstr
-    order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 8"  # > "+file+".txt "
+    order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 18"  # > "+file+".txt "
     # print(order)
     start_time = time.time()
     # print(i,start_time)
@@ -238,16 +238,16 @@ def thread_func(threads, filestr):
     end_time = time.time()
     # for t in threads:
     #    if
-    print(s)
+    print(f"run result :{s}")
     result = 1
-    print(filestr, (end_time - start_time) * 1000, 'ms')
+    print(f'file : {filestr} , cost time : {(end_time - start_time) * 1000}ms')
     # print(filestr)
     if "Invalid." in s:
         # print(filestr,(end_time-start_time)*1000,'ms')
         fouts = open(filestr + ".txt", 'w')
         # resultstr=s
         fouts.write(s)
-        fouts.write("time:" + str((end_time - start_time) * 1000))
+        fouts.write("time:" + str((end_time - start_time) * 1000) + 'ms')
         fouts.close()
 
 
@@ -270,9 +270,9 @@ def combination_impl(l, n, stack, length, SS):
 
 
 if __name__ == '__main__':
-    Cipherstr = "PROST"  # ciphername
-    Sbox = [0, 4, 8, 15, 1, 5, 14, 9, 2, 7, 10, 12, 11, 13, 6, 3]  # PROST# S-box
-    MC = 8  # number of AND gates
+    Cipherstr = "Present"  # ciphername
+    Sbox = [12, 5, 6, 11, 9, 0, 10, 13, 3, 14, 15, 8, 4, 7, 1, 2]  # PROST# S-box
+    MC = 6  # number of AND gates
     bitnum = 4  # number of S-box inputs
     for GateNum in range(MC, 1, -1):
         Size = pow(2, bitnum)
@@ -283,12 +283,15 @@ if __name__ == '__main__':
             l.append(j)
         for depth in range(1, GateNum + 1):
             SStr = []
+            # get a different combination on depth and gate
             combination_impl(l, GateNum, [], depth, SStr)
             SStr0 = []
+
+            #  filter SStr front level number of out pin cloud over behind level number of input pin
             for dd in range(len(SStr)):
                 SS = SStr[len(SStr) - dd - 1]
                 ff = 1
-                gs = 1
+                gs = 1  # next level need number of wires
                 g0 = 0
                 for sd in range(len(SS)):
                     if SS[len(SS) - sd - 1] > gs + g0:
@@ -298,28 +301,36 @@ if __name__ == '__main__':
                     gs = 2 * SS[len(SS) - sd - 1]
                 if (ff):
                     SStr0.append(SS)
+
             x = 1
             val = 1
             issolver = 0
-            # print(SStr0)
+            print(f"SStr {SStr} , SStr0 {SStr0}")
             for d in range(len(SStr0)):
                 result = 0
                 SS = SStr0[d]
-                print(SS)
+
+                print(f'SS {SS}')
+
                 if not os.path.exists("./mc"):
                     os.system("mkdir ./mc")
-                if not os.path.exists("./mc/"+Cipherstr):
-                    os.system("mkdir ./mc/"+Cipherstr)
+                if not os.path.exists("./mc/" + Cipherstr):
+                    os.system("mkdir ./mc/" + Cipherstr)
                 filestr = "./mc/" + Cipherstr + "/" + Cipherstr + "newmc_D" + str(depth)
-                fout = open(filestr + "0.cvc", 'w')
+                fout = open(filestr + "_0.cvc", 'w')
+
                 State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS)
                 Trival_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, Sbox)
                 Logic_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, depth, SS)
                 Objective(fout)
+
                 fout.close()
-                fout0 = open(filestr + "1.cvc", 'w')
-                fout1 = open(filestr + "2.cvc", 'w')
+
+                fout0 = open(filestr + "_1.cvc", 'w')
+                fout1 = open(filestr + "_2.cvc", 'w')
                 # fout2=open(filestr + ".txt", 'w')
+
+                # let the same Q_i not be input of one gate
                 b0str = ""
                 b1str = ""
                 for j in range(0, QNum, 2):
@@ -327,7 +338,7 @@ if __name__ == '__main__':
                     b1str = b1str + "ASSERT( BVGT(A_" + str(j + 1) + ", A_" + str(j) + "));\n"
                 lines0 = []
                 lines = []
-                f = open(filestr + "0.cvc", 'r')
+                f = open(filestr + "_0.cvc", 'r')
                 s = ""
                 s0 = ""
                 for line in f:
@@ -337,9 +348,9 @@ if __name__ == '__main__':
                 lines.insert(4 + 2 * bitnum + GateNum, b1str)
                 s = ''.join(lines)
                 s0 = ''.join(lines0)
-                fout0.write(s0)
                 f.close()
                 # fout0=open(filestr + ".cvc", 'w')
+                fout0.write(s0)
                 fout1.write(s)
                 fout0.close()
                 fout1.close()
@@ -350,7 +361,7 @@ if __name__ == '__main__':
                 threads = []
                 # thread_func(filestr,filestr)
                 for j in range(0, 3):
-                    p = threading.Thread(target=thread_func, args=(threads, str(filestr) + str(j),))
+                    p = threading.Thread(target=thread_func, args=(threads, str(filestr) + '_' + str(j),))
                     threads.append(p)
                 # print(threads)
                 # p.start()
@@ -392,7 +403,7 @@ if __name__ == '__main__':
                         res = os.popen(order).read()
                         for line in res.splitlines():
                             s = line.split()
-                            if filestr + "0.cvc" in s or filestr + "1.cvc" in s or filestr + "2.cvc" in s:
+                            if filestr + "_0.cvc" in s or filestr + "_1.cvc" in s or filestr + "_2.cvc" in s:
                                 # print(s[1])
                                 r = os.popen("kill -9 " + s[1]).read()
                                 # print("---------------------")
@@ -403,5 +414,3 @@ if __name__ == '__main__':
                     if ishassolver:
                         print(depth)
                         break
-
-
