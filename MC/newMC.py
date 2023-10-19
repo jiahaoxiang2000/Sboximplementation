@@ -69,6 +69,14 @@ def State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS):
 
 
 def Decompose(flag, Sbox, Size, bitnum):
+    """
+    decompose S-box ; letter endian
+    :param flag:  0: X 1:Y
+    :param Sbox:  S-box
+    :param Size:  size of S-box
+    :param bitnum: number of S-box inputs
+    """
+    # i is size of S-box equal 2**bitNum
     for i in range(Size):
         tem = ""
         if flag == 0:
@@ -81,6 +89,16 @@ def Decompose(flag, Sbox, Size, bitnum):
 
 
 def Trival_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, Sbox):
+    """
+        set input and output of S-box constraints
+    :param fout: file
+    :param bitnum: bit number of sbox input
+    :param Size: binary number of sbox input value
+    :param GateNum: gate number of sbox
+    :param QNum: input number of gate
+    :param bNum:
+    :param Sbox: sbox
+    """
     # Trival Constraints
     # X
     Decompose(0, Sbox, Size, bitnum)
@@ -91,7 +109,7 @@ def Trival_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, Sbox):
         fout.write(" );\n")
     # Y
     Decompose(1, Sbox, Size, bitnum)
-    for i in range(1):
+    for i in range(bitnum):
         fout.write("ASSERT( Y_" + str(i) + " = 0bin")
         for j in range(Size):
             fout.write(str(A[i][j]))
@@ -102,6 +120,17 @@ def Trival_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, Sbox):
 
 
 def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, lenght):
+    """
+        write Q and T constraints
+    :param fout: file
+    :param bitnum:
+    :param Size:
+    :param GateNum:
+    :param Qsum:
+    :param Tsum:
+    :param depth:
+    :param lenght:
+    """
     countQ = Qsum
     countT = Tsum
     for k in range(GateNum):
@@ -150,6 +179,17 @@ def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, lenght):
 
 
 def Logic_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, depth, SS):
+    """
+        write Q T Y constraints
+    :param fout:
+    :param bitnum:
+    :param Size:
+    :param GateNum:
+    :param QNum:
+    :param bNum:
+    :param depth:
+    :param SS:
+    """
     countA = 0
     countB = 0
     countQ = 0
@@ -167,7 +207,7 @@ def Logic_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, depth, SS):
         lenght = lenght + SS[d]
         # print(lenght)
         # Y
-    for y in range(1):
+    for y in range(bitnum):
         fout.write("ASSERT(  Y_" + str(y) + " = ")
         for i in range(bitnum):
             x = "( IF A_" + str(countQ) + "[" + str(bitnum + countT - 1 - i) + ":" + str(
@@ -196,6 +236,10 @@ def Logic_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, depth, SS):
 
 
 def Objective(fout):
+    """
+    add some end code
+    :param fout:
+    """
     fout.write("QUERY(FALSE);\nCOUNTEREXAMPLE;\n")
 
 
