@@ -69,6 +69,14 @@ def State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS):
 
 
 def Decompose(flag, Sbox, Size, bitnum):
+    """
+    decompose S-box ; letter endian
+    :param flag:  0: X 1:Y
+    :param Sbox:  S-box
+    :param Size:  size of S-box
+    :param bitnum: number of S-box inputs
+    """
+    # i is size of S-box equal 2**bitNum
     for i in range(Size):
         tem = ""
         if flag == 0:
@@ -81,6 +89,16 @@ def Decompose(flag, Sbox, Size, bitnum):
 
 
 def Trival_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, Sbox):
+    """
+        set input and output of S-box constraints
+    :param fout: file
+    :param bitnum: bit number of sbox input
+    :param Size: binary number of sbox input value
+    :param GateNum: gate number of sbox
+    :param QNum: input number of gate
+    :param bNum:
+    :param Sbox: sbox
+    """
     # Trival Constraints
     # X
     Decompose(0, Sbox, Size, bitnum)
@@ -91,7 +109,7 @@ def Trival_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, Sbox):
         fout.write(" );\n")
     # Y
     Decompose(1, Sbox, Size, bitnum)
-    for i in range(1):
+    for i in range(bitnum):
         fout.write("ASSERT( Y_" + str(i) + " = 0bin")
         for j in range(Size):
             fout.write(str(A[i][j]))
