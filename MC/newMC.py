@@ -120,6 +120,17 @@ def Trival_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, Sbox):
 
 
 def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, lenght):
+    """
+        write Q and T constraints
+    :param fout: file
+    :param bitnum:
+    :param Size:
+    :param GateNum:
+    :param Qsum:
+    :param Tsum:
+    :param depth:
+    :param lenght:
+    """
     countQ = Qsum
     countT = Tsum
     for k in range(GateNum):
@@ -168,6 +179,17 @@ def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, lenght):
 
 
 def Logic_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, depth, SS):
+    """
+        write Q T Y constraints
+    :param fout:
+    :param bitnum:
+    :param Size:
+    :param GateNum:
+    :param QNum:
+    :param bNum:
+    :param depth:
+    :param SS:
+    """
     countA = 0
     countB = 0
     countQ = 0
@@ -185,7 +207,7 @@ def Logic_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, depth, SS):
         lenght = lenght + SS[d]
         # print(lenght)
         # Y
-    for y in range(1):
+    for y in range(bitnum):
         fout.write("ASSERT(  Y_" + str(y) + " = ")
         for i in range(bitnum):
             x = "( IF A_" + str(countQ) + "[" + str(bitnum + countT - 1 - i) + ":" + str(
@@ -214,6 +236,10 @@ def Logic_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, depth, SS):
 
 
 def Objective(fout):
+    """
+    add some end code
+    :param fout:
+    """
     fout.write("QUERY(FALSE);\nCOUNTEREXAMPLE;\n")
 
 
@@ -326,8 +352,8 @@ if __name__ == '__main__':
                 print(SS)
                 if not os.path.exists("./mc"):
                     os.system("mkdir ./mc")
-                if not os.path.exists("./mc/"+Cipherstr):
-                    os.system("mkdir ./mc/"+Cipherstr)
+                if not os.path.exists("./mc/" + Cipherstr):
+                    os.system("mkdir ./mc/" + Cipherstr)
                 filestr = "./mc/" + Cipherstr + "/" + Cipherstr + "newmc_D" + str(depth)
                 fout = open(filestr + "0.cvc", 'w')
                 State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS)
@@ -421,5 +447,3 @@ if __name__ == '__main__':
                     if ishassolver:
                         print(depth)
                         break
-
-
