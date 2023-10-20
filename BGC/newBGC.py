@@ -171,8 +171,9 @@ def Objective(fout):
 
 def thread_func(threads, filestr, i):
     global result
-    order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 18"  # > " + filestr + ".txt "
+    order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 20"  # > " + filestr + ".txt "
     # print(order)
+    argument = []
     start_time = time.time()
     # print(i,start_time)
     s = (os.popen(order).read())
@@ -216,12 +217,12 @@ if __name__ == '__main__':
     result = 0
     Cipherstr = "Xoodyak"
     Sbox = [0, 5, 3, 2, 6, 1, 4, 7]  # PROST
-    BGC = 8  # number of gates
+    BGC = 7  # number of gates
     bitnum = 3  # 4
-    d = 2  # depth
+    SsIndex = 2  # depth
     p = 0  # parallel signd
 
-    for GateNum in range(BGC, 1, -1):
+    for GateNum in range(BGC, BGC - 1, -1):
         result = 0
         Size = pow(2, bitnum)
         QNum = 2 * GateNum
@@ -229,13 +230,13 @@ if __name__ == '__main__':
         l = []
         for j in range(1, GateNum + 1):
             l.append(j)
-        tttstr=[]
-        stardepth = d
-        enddepth = d-1
-        if p:#parallel implementation
-            stardepth=d
-            enddepth=1
-        for depth in range(stardepth, enddepth,-1):
+        tttstr = []
+        stardepth = GateNum
+        enddepth = GateNum - 1
+        if p:  # parallel implementation
+            stardepth = SsIndex
+            enddepth = 1
+        for depth in range(stardepth, enddepth, -1):
             SStr = []
             combination_impl(l, GateNum, [], depth, SStr)
             SStr0 = []
@@ -255,13 +256,13 @@ if __name__ == '__main__':
             x = 1
             val = 1
             ishassolver = 0
-            for d in range(len(SStr0)):
+            for SsIndex in range(len(SStr0)):
                 result = 0
-                SS = SStr0[d]
+                SS = SStr0[SsIndex]
                 sz = ""
                 for dd in range(len(SS)):
                     sz = sz + str(SS[dd])
-                print(d, Cipherstr, SS)
+                print(SsIndex, Cipherstr, SS)
                 if not os.path.exists("./bgc"):
                     os.system("mkdir ./bgc")
                 if not os.path.exists("./bgc/" + Cipherstr):
@@ -308,26 +309,11 @@ if __name__ == '__main__':
                 threads = []
                 # thread_func(filestr,filestr)
                 for j in range(0, 3):
-                    p = threading.Thread(target=thread_func, args=(threads, str(filestr) + '_' + str(j), d,))
+                    p = threading.Thread(target=thread_func, args=(threads, str(filestr) + '_' + str(j), SsIndex,))
                     threads.append(p)
-                # print(threads)
-                # p.start()
-
-                result = 0
-
+                # start jobs
                 for t in threads:
-                    t.start()  #
-                x = 1
-                while (x):
-                    # xx=0
-                    # end_time = time.time()
-                    # if end_time - start_time > 600:#time limit
-                    #    xx=1
-                    if result == d:  # len(cipher):
-                        x = 0
-                        order = "ps -ef|grep " + Cipherstr
-                        res = os.popen(order).read()
-                        for line in res.splitlines():
-                            s = line.split()
-                            if filestr + "_0.cvc" in s or filestr + "_1.cvc" in s or filestr + "_2.cvc" in s:
-                                r = os.popen("kill -9 " + s[1]).read()
+                    t.start()
+                # wait jobs
+                for t in threads:
+                    t.join()

@@ -260,7 +260,7 @@ def Objective(fout):
 def thread_func(threads, file):
     global result
     global resultstr
-    order = "stp -p " + str(file) + ".cvc --cryptominisat --threads 1 > " + file + ".txt "
+    order = "stp -p " + str(file) + ".cvc --cryptominisat --threads 20 > " + file + ".txt "
     start_time = time.time()
     s = (os.popen(order).read())
     print(s)
@@ -349,7 +349,7 @@ if __name__ == '__main__':
                 fout.close()
                 x = 1
                 while (x):
-                    order = "stp -p " + str(filestr) + ".cvc  --cryptominisat --threads 1"  # > "+file+".txt "
+                    order = "stp -p " + str(filestr) + "0.cvc  --cryptominisat --threads 20"  # > "+file+".txt "
                     # print(order)
                     start_time = time.time()
                     # print(i,start_time)
@@ -397,7 +397,7 @@ if __name__ == '__main__':
                             fout1.write("\n".join(AAstr) + "\n\n")
                             fout1.close()
                             tttstr.append(ttstr)
-                        f = open(filestr + ".cvc", 'r')
+                        f = open(filestr + "0.cvc", 'r')
                         lines = []
                         b1str = "ASSERT("
                         for i0 in range(len(Astr)):
@@ -416,6 +416,6 @@ if __name__ == '__main__':
                         lines.insert(4 + 2 * bitnum + GateNum, b1str)
                         s = ''.join(lines)
                         f.close()
-                        f = open(filestr + ".cvc", 'w')
+                        f = open(filestr + "0.cvc", 'w')
                         f.write(s)
                         f.close()

@@ -342,19 +342,22 @@ if __name__ == '__main__':
             SStr0 = []
 
             #  filter SStr front level number of out pin cloud over behind level number of input pin
-            for dd in range(len(SStr)):
-                SS = SStr[len(SStr) - dd - 1]
-                ff = 1
-                gs = 1  # next level need number of wires
-                g0 = 0
-                for sd in range(len(SS)):
-                    if SS[len(SS) - sd - 1] > gs + g0:
-                        ff = 0
-                        break
-                    g0 = g0 + gs - SS[len(SS) - sd - 1]
-                    gs = 2 * SS[len(SS) - sd - 1]
-                if (ff):
-                    SStr0.append(SS)
+            # for dd in range(len(SStr)):
+            #     SS = SStr[len(SStr) - dd - 1]
+            #     ff = 1
+            #     gs = 1  # next level need number of wires
+            #     g0 = 0
+            #     for sd in range(len(SS)):
+            #         if SS[len(SS) - sd - 1] > gs + g0:
+            #             ff = 0
+            #             break
+            #         g0 = g0 + gs - SS[len(SS) - sd - 1]
+            #         gs = 2 * SS[len(SS) - sd - 1]
+            #     if (ff):
+            #         SStr0.append(SS)
+
+            for sd in range(len(SStr)):
+                SStr0.append(SStr[sd])
 
             x = 1
             val = 1
