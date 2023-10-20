@@ -255,8 +255,8 @@ if __name__ == '__main__':
     TTstr = []  # the solution of part S-box output, its value is [T_0,T_1...]
 
     constr = []  # Exclude existing solutions realized by S-box NOT(T_0=0xf22f)
-    Cipherstr = "Present"  # ciphername
-    Sbox = [12, 5, 6, 11, 9, 0, 10, 13, 3, 14, 15, 8, 4, 7, 1, 2]  # PROST# S-box
+    Cipherstr = 'Craft'  # ciphername
+    Sbox = [12, 10, 13, 3, 14, 11, 15, 7, 8, 9, 1, 5, 0, 2, 4, 6]  # PROST# S-box
     MC = 8  # number of AND gates
     bitnum = 4  # number of S-box inputs
     for GateNum in range(MC, 1, -1):

@@ -22,6 +22,16 @@ def tobits(num, bit_len):
 
 
 def State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS):
+    """
+    write X Y T Q A all define
+    :param fout: wirte file handler
+    :param bitnum: sbox input bit
+    :param Size: 2**bitnum
+    :param GateNum: number of Gate
+    :param QNum: input wire number of gate
+    :param bNum:
+    :param SS: number of gate in different depth
+    """
     # State Variate
     for i in range(bitnum):
         fout.write('X_' + str(i))
@@ -29,7 +39,7 @@ def State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS):
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
         else:
             fout.write(" , ")
-    for i in range(1):
+    for i in range(bitnum):
         fout.write("Y_" + str(i))
         if (i == bitnum - 1):
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
@@ -51,9 +61,9 @@ def State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS):
     len0 = 1
     sum = SS[0]
     star = 0
-    for i in range((QNum + bitnum)):
+    for i in range((QNum + bitnum * bitnum)):
         fout.write("A_" + str(i))
-        if (i == QNum + bitnum - 1):
+        if i == QNum + (bitnum * bitnum) - 1:
             fout.write(" : BITVECTOR( " + str((bitnum + GateNum)) + " );\n")
         elif ((i + 1) % 2 == 0 and i < QNum):
             fout.write(" : BITVECTOR( " + str((bitnum + len0)) + " );\n")
@@ -282,9 +292,9 @@ def thread_func(threads, filestr):
     end_time = time.time()
     # for t in threads:
     #    if
-    print(f"run result :{s}")
+    # print(f"run result :{s}")
     result = 1
-    print(f'file : {filestr} , cost time : {(end_time - start_time) * 1000}ms')
+    # print(f'file : {filestr} , cost time : {(end_time - start_time) * 1000}ms')
     # print(filestr)
     if "Invalid." in s:
         # print(filestr,(end_time-start_time)*1000,'ms')
@@ -314,11 +324,11 @@ def combination_impl(l, n, stack, length, SS):
 
 
 if __name__ == '__main__':
-    Cipherstr = "Present"  # ciphername
-    Sbox = [12, 5, 6, 11, 9, 0, 10, 13, 3, 14, 15, 8, 4, 7, 1, 2]  # PROST# S-box
-    MC = 6  # number of AND gates
-    bitnum = 4  # number of S-box inputs
-    for GateNum in range(MC, 1, -1):
+    Cipherstr = "Xoodyak"  # ciphername
+    Sbox = [0, 5, 3, 2, 6, 1, 4, 7]  # PROST# S-box
+    MC = 3  # number of AND gates
+    bitnum = 3  # number of S-box inputs
+    for GateNum in range(MC, MC - 1, -1):
         Size = pow(2, bitnum)
         QNum = 2 * GateNum
         bNum = GateNum
@@ -350,17 +360,19 @@ if __name__ == '__main__':
             val = 1
             issolver = 0
             print(f"SStr {SStr} , SStr0 {SStr0}")
-            for d in range(len(SStr0)):
+            for d in range(len(SStr0) if len(SStr0) < 1 else 1):
                 result = 0
                 SS = SStr0[d]
-
+                sz = ""
+                for dd in range(len(SS)):
+                    sz = sz + str(SS[dd])
                 print(f'SS {SS}')
 
                 if not os.path.exists("./mc"):
                     os.system("mkdir ./mc")
                 if not os.path.exists("./mc/" + Cipherstr):
                     os.system("mkdir ./mc/" + Cipherstr)
-                filestr = "./mc/" + Cipherstr + "/" + Cipherstr + "newmc_D" + str(depth)
+                filestr = "./mc/" + Cipherstr + "/" + Cipherstr + "newmc_D" + str(depth) + '_' + sz
                 fout = open(filestr + "_0.cvc", 'w')
 
                 State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS)
@@ -453,8 +465,8 @@ if __name__ == '__main__':
                                 # print("---------------------")
                                 # os.system(order)
 
-                        print(os.system("rm -f " + filestr + "*.cvc"))
-                        print("rm -f " + filestr + "*.cvc")
+                        # print(os.system("rm -f " + filestr + "*.cvc"))
+                        # print("rm -f " + filestr + "*.cvc")
                     if ishassolver:
-                        print(depth)
+                        print(f"depth : {depth} \n\n")
                         break
