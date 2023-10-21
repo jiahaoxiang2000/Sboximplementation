@@ -324,7 +324,7 @@ if __name__ == '__main__':
             # s=(os.popen(order))
             # os.system(order)
             s = (os.popen(order).read())
-            resultstr = s
+            result_str = s
             print(s)
             fstr = "./oldgec/" + Cipherstr + "/" + str(GateNum) + Cipherstr + str(MinGEC)
             foutc = open(fstr + ".txt", 'a+')
@@ -333,7 +333,7 @@ if __name__ == '__main__':
             Astr = []
             AAstr = []
             Ystr = ""
-            for line in resultstr.splitlines():
+            for line in result_str.splitlines():
                 s = line.split()
                 if "Valid." in s[0]:
                     x = 0
@@ -343,7 +343,7 @@ if __name__ == '__main__':
                     break
             ttstr = []
             getMinGEC = ""
-            for line in resultstr.splitlines():
+            for line in result_str.splitlines():
                 s = line.split()
                 print(s)
                 isture = 0

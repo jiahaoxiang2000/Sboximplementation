@@ -9,7 +9,7 @@ result = 0
 
 A = [[0 for i in range(256)] for j in range(8)]
 resstr = ""
-resultstr = ""
+result_str = ""
 
 
 def tobits(num, bit_len):
@@ -280,7 +280,7 @@ def time_stamp1():
 
 def thread_func(threads, filestr):
     global result
-    global resultstr
+    global result_str
     order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 18"  # > "+file+".txt "
     # print(order)
     start_time = time.time()
@@ -424,7 +424,7 @@ if __name__ == '__main__':
                     threads.append(p)
                 # print(threads)
                 # p.start()
-                resultstr = ""
+                result_str = ""
                 result = 0
                 ishassolver = 0
                 for t in threads:
@@ -439,7 +439,7 @@ if __name__ == '__main__':
                     #    xx = 1
                     if result == 1:  # len(cipher):
                         x = 0
-                        for line in resultstr.splitlines():
+                        for line in result_str.splitlines():
                             s = line.split()
                             if "Invalid." in s:
                                 # print(resultstr)
@@ -454,7 +454,7 @@ if __name__ == '__main__':
                                 # MinGEC=MinGEC-1
                                 ishassolver = 0
                                 result = 0
-                                resultstr = ""
+                                result_str = ""
                                 break
                         # print(depth,resultstr)
                         order = "ps -ef|grep " + filestr

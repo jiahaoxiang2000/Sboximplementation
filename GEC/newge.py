@@ -6,10 +6,11 @@ import inspect
 import ctypes
 import subprocess
 from itertools import combinations
-resultstr=0
+
+result_str = 0
 result = 0
 A = [[0 for i in range(256)] for i in range(8)]
-
+# 0  UMC 180nm 1 SMIC 130nm
 cost = [
     ["0bin00001000", "0bin00000110",
      "0bin00000100", "0bin00000011",
@@ -30,12 +31,13 @@ cost = [
      "0bin00000110", "0bin00001000",
      "0bin00001000"]
 ]  # the GE of different library
-Gatetype=["XOR","XNOR", "AND", "NAND", "OR", "NOR", "NOT", "NOT", "NOT", "XOR3", "XNOR3",
-          "AND3", "NAND3", "OR3", "NOR3", "MAOI1", "MOAI1"]
-GateVal=["0bin00000010","0bin00000011","0bin00000100","0bin00000101","0bin00000110",
-         "0bin00000111","0bin00001001","0bin00001011","0bin00010001","0bin00010010",
-         "0bin00010011","0bin00100000","0bin00100001","0bin01110110","0bin01110111",
-         "0bin10110000","0bin10110001"]
+Gatetype = ["XOR", "XNOR", "AND", "NAND", "OR", "NOR", "NOT", "NOT", "NOT", "XOR3", "XNOR3",
+            "AND3", "NAND3", "OR3", "NOR3", "MAOI1", "MOAI1"]
+GateVal = ["0bin00000010", "0bin00000011", "0bin00000100", "0bin00000101", "0bin00000110",
+           "0bin00000111", "0bin00001001", "0bin00001011", "0bin00010001", "0bin00010010",
+           "0bin00010011", "0bin00100000", "0bin00100001", "0bin01110110", "0bin01110111",
+           "0bin10110000", "0bin10110001"]
+
 
 def tobits(num, bit_len):
     # tobinary string
@@ -125,7 +127,7 @@ def Decompose(flag, Sbox):
             tem = i
         else:
             tem = Sbox[i]
-        for j in range(bitnum - 1, -1, -1):
+        for j in range(bit_num - 1, -1, -1):
             A[j][i] = tem % 2
             tem //= 2
 
@@ -147,12 +149,12 @@ def Trival_Constraint(fout, bitnum, Size, GateNum, Sbox, lg):
             fout.write(str(A[i][j]))
         fout.write(" );\n")
     for i in range(GateNum):
-        if len(lg) > 0 and len(lg)<17:
+        if len(lg) > 0 and len(lg) < 17:
             fout.write("ASSERT(")
             for i0 in range(len(lg)):
                 if lg[i0] in Gatetype:
-                    fout.write("( B_" + str(i) + "="+GateVal[Gatetype.index(lg[i0])]+")")
-                    if i0<len(lg)-1:
+                    fout.write("( B_" + str(i) + "=" + GateVal[Gatetype.index(lg[i0])] + ")")
+                    if i0 < len(lg) - 1:
                         fout.write(" OR ")
             fout.write(");\n")
         else:
@@ -259,18 +261,18 @@ def Objective(fout):
 
 def thread_func(threads, file):
     global result
-    global resultstr
+    global result_str
     order = "stp -p " + str(file) + ".cvc --cryptominisat --threads 20 > " + file + ".txt "
     start_time = time.time()
     s = (os.popen(order).read())
     print(s)
-    resultstr = s
+    result_str = s
     end_time = time.time()
 
     if result == 0:
         result = 1
-        fouts = open(filestr + ".txt", 'w')
-        resultstr=s
+        fouts = open(file_str + ".txt", 'w')
+        result_str = s
         fouts.write(s)
         fouts.write("time:" + str((end_time - start_time) * 1000))
         fouts.close()
@@ -294,35 +296,36 @@ def combination_impl(l, n, stack, length, SS):
 
 
 if __name__ == '__main__':
-    Cipherstr = "PROST"
-    Sbox = [0, 4, 8, 15, 1, 5, 14, 9, 2, 7, 10, 12, 11, 13, 6, 3]  # PROST
-    GN = 8  # number of gates
-    GEC = 37  # number of gates
-    bitnum = 4
-    lg=[]
-    scl = 1
-    dup=4
-    dsign=1 #depth
-    for GateNum in range(GN,1,-1):
-        Size = pow(2, bitnum)
+    Cipherstr = "Xoodyak"
+    Sbox = [0, 5, 3, 2, 6, 1, 4, 7]  # PROST
+    GN = 5  # number of gates
+    GEC = 50  # number of gates
+    bit_num = 3
+    lg = []  # logic gate constraint
+    scl = 0  # process library select
+    dup = 2  # start depth
+    design = 1  # depth
+    for GateNum in range(GN, 1, -1):
+        Size = pow(2, bit_num)
         QNum = 4 * GateNum
         bNum = GateNum
         MinGEC = GEC
-        l = []
+        filter_list = []
         tttstr = []
-        stardepth = GateNum
-        if dsign:  # parallel implementation
-            stardepth = dup
+        start_depth = GateNum
+        if design:  # parallel implementation
+            start_depth = dup
         for j in range(1, GateNum + 1):
-            l.append(j)
-        for depth in range(stardepth, 1, -1):
+            filter_list.append(j)
+        for depth in range(start_depth, 1, -1):
             SStr = []
-            combination_impl(l, GateNum, [], depth, SStr)
+            combination_impl(filter_list, GateNum, [], depth, SStr)
             SStr0 = []
+            # filter some level combination e.g. [1,1,5]
             for dd in range(len(SStr)):
                 SS = SStr[dd]
                 ff = 1
-                gs = bitnum
+                gs = bit_num
                 gx = 0
                 for sd in range(len(SS)):
                     if SS[len(SS) - sd - 1] > gs + gx:
@@ -332,90 +335,107 @@ if __name__ == '__main__':
                     gs = 2 * SS[len(SS) - sd - 1]
                 if (ff):
                     SStr0.append(SS)
-            ishassolver = 0
+            is_has_solver = 0
+            print(f'SStr0 : {SStr0}')
             for d in range(len(SStr0)):
-                SS=SStr0[d]
+                SS = SStr0[d]
+                print(f'SS : {SS}')
+                sz = ""
+                for dd in range(len(SS)):
+                    sz = sz + str(SS[dd])
+
                 if not os.path.exists("./gec"):
                     os.system("mkdir ./gec")
                 if not os.path.exists("./gec/" + Cipherstr):
                     os.system("mkdir ./gec/" + Cipherstr)
 
-                filestr = "./gec/"+Cipherstr+"/"+Cipherstr+"gec"  #encoding modle to file
-                fout = open(filestr + "0.cvc", 'w')
-                State_Variate(fout, bitnum, Size, GateNum, QNum, scl)
-                Trival_Constraint(fout, bitnum, Size, GateNum, Sbox,lg)
-                Logic_Constraint(fout, bitnum, Size, GateNum, MinGEC, depth, SS)
-                Objective(fout)
-                fout.close()
-                x = 1
-                while (x):
-                    order = "stp -p " + str(filestr) + "0.cvc  --cryptominisat --threads 20"  # > "+file+".txt "
-                    # print(order)
-                    start_time = time.time()
-                    # print(i,start_time)
-                    # s=(os.popen(order))
-                    # os.system(order)
-                    s = (os.popen(order).read())
-                    resultstr = s
-                    print(s)
-                    fstr = "./gec/"+Cipherstr+"/" + str(GateNum) + Cipherstr + str(MinGEC)
-                    foutc = open(fstr + ".txt", 'a+')
-                    foutc.write(s)
-                    foutc.close()
-                    Astr = []
-                    AAstr = []
-                    Ystr = ""
-                    for line in resultstr.splitlines():
-                        s = line.split()
-                        if "Valid." in s[0]:
-                            x = 0
-                            break
-                        if "Y_" in s[1]:
-                            Ystr = int(s[3], 16)
-                            break
-                    ttstr = []
-                    getMinGEC = ""
-                    for line in resultstr.splitlines():
-                        s = line.split()
-                        print(s)
-                        isture = 0
-                        if len(s) > 2 and "T_" in s[1] and int(s[3], 16) != Ystr:
-                            Astr.append("".join(s))
-                            ttstr.append(int(s[3], 16))
-                        if len(s) > 2 and "T_" in s[1]:
-                            AAstr.append("".join(s))
-                        if len(s) > 2 and "GEC" in s[1]:
-                            getMinGEC = int(s[3], 16)
-                        if "Valid." in s[0]:
-                            x = 0
-                            break
-                    if len(Astr) > 0:
-                        ttstr.sort()
-                        if ttstr not in tttstr:
-                            filestr1 = "./gec/"+Cipherstr+"/" + str(GateNum) + str(MinGEC)
-                            fout1 = open(filestr1 + ".txt", 'a+')
-                            fout1.write("\n".join(AAstr) + "\n\n")
-                            fout1.close()
-                            tttstr.append(ttstr)
-                        f = open(filestr + "0.cvc", 'r')
-                        lines = []
-                        b1str = "ASSERT("
-                        for i0 in range(len(Astr)):
-                            b1str = b1str + " (NOT" + ((Astr[i0].replace("ASSERT", "")).replace(";", "")) + ") "
-                            if i0 == len(Astr) - 1:
-                                b1str = b1str + ");\n"
-                            else:
-                                b1str = b1str + "OR"
-                        # print(b1str)
-                        for line in f:
-                            if dsign!=1 and "ASSERT( BVLT(GEC , 0bin" + tobits(MinGEC, 8) + ") );\n" in line:
-                                lines.append("ASSERT( BVLT(GEC , 0bin" + tobits(getMinGEC, 8) + ") );\n")
-                                MinGEC = getMinGEC
-                            else:
-                                lines.append(line)
-                        lines.insert(4 + 2 * bitnum + GateNum, b1str)
-                        s = ''.join(lines)
-                        f.close()
-                        f = open(filestr + "0.cvc", 'w')
-                        f.write(s)
-                        f.close()
+                file_str = "./gec/" + Cipherstr + "/" + Cipherstr + "_d_" + str(
+                    depth) + "_" + sz  # encoding modle to file
+                f_out = open(file_str + "_0.cvc", 'w')
+                State_Variate(f_out, bit_num, Size, GateNum, QNum, scl)
+                Trival_Constraint(f_out, bit_num, Size, GateNum, Sbox, lg)
+                Logic_Constraint(f_out, bit_num, Size, GateNum, MinGEC, depth, SS)
+                Objective(f_out)
+                f_out.close()
+                # x = 1
+                # while (x):
+                order = "stp -p " + str(file_str) + "_0.cvc  --cryptominisat --threads 20"  # > "+file+".txt "
+                # print(order)
+                start_time = time.time()
+                # print(i,start_time)
+                # s=(os.popen(order))
+                # os.system(order)
+                s = (os.popen(order).read())
+                end_time = time.time()
+                result_str = s
+                print(s)
+                if "Invalid." in s:
+                    print(file_str, (end_time - start_time) * 1000, 'ms')
+                    s = s + str((end_time - start_time) * 1000)
+                    f_out_c = open(file_str + ".txt", 'a+')
+                    f_out_c.write(s)
+                    f_out_c.close()
+
+                # update .cvc by result
+                # Astr = []
+                # AAstr = []
+                # Ystr = ""
+                #
+                # for line in result_str.splitlines():
+                #     s = line.split()
+                #     if "Valid." in s[0]:
+                #         x = 0
+                #         break
+                #     if "Y_" in s[1]:
+                #         Ystr = int(s[3], 16)
+                #         break
+                #
+                # ttstr = []
+                #
+                # getMinGEC = ""
+                # for line in result_str.splitlines():
+                #     s = line.split()
+                #     print(s)
+                #     isture = 0
+                #     if len(s) > 2 and "T_" in s[1] and int(s[3], 16) != Ystr:
+                #         Astr.append("".join(s))
+                #         ttstr.append(int(s[3], 16))
+                #     if len(s) > 2 and "T_" in s[1]:
+                #         AAstr.append("".join(s))
+                #     if len(s) > 2 and "GEC" in s[1]:
+                #         getMinGEC = int(s[3], 16)
+                #     if "Valid." in s[0]:
+                #         x = 0
+                #         break
+                # if len(Astr) > 0:
+                #     ttstr.sort()
+                #     if ttstr not in tttstr:
+                #         filestr1 = "./gec/" + Cipherstr + "/" + str(GateNum) + "_" + str(MinGEC)
+                #         fout1 = open(filestr1 + ".txt", 'a+')
+                #         fout1.write("\n".join(AAstr) + "\n\n")
+                #         fout1.close()
+                #         tttstr.append(ttstr)
+                #     f = open(file_str + "_0.cvc", 'r')
+                #     lines = []
+                #     # reduce search space by adding already result
+                #     b1str = "ASSERT("
+                #     for i0 in range(len(Astr)):
+                #         b1str = b1str + " (NOT" + ((Astr[i0].replace("ASSERT", "")).replace(";", "")) + ") "
+                #         if i0 == len(Astr) - 1:
+                #             b1str = b1str + ");\n"
+                #         else:
+                #             b1str = b1str + "OR"
+                #     # print(b1str)
+                #
+                #     for line in f:
+                #         if design != 1 and "ASSERT( BVLT(GEC , 0bin" + tobits(MinGEC, 8) + ") );\n" in line:
+                #             lines.append("ASSERT( BVLT(GEC , 0bin" + tobits(getMinGEC, 8) + ") );\n")
+                #             MinGEC = getMinGEC
+                #         else:
+                #             lines.append(line)
+                #     lines.insert(4 + 2 * bitnum + GateNum, b1str)
+                #     s = ''.join(lines)
+                #     f.close()
+                #     f = open(file_str + "_0.cvc", 'w')
+                #     f.write(s)
+                #     f.close()

@@ -310,20 +310,20 @@ if __name__ == '__main__':
                         # s=(os.popen(order))
                         # os.system(order)
                         s = (os.popen(order).read())
-                        resultstr = s
+                        result_str = s
                         print(s,filestr)
                         if "Invalid." in s:
                             issolver=1
                             Astr = []
                             AAstr = []
                             Ystr = ""
-                            for line in resultstr.splitlines():
+                            for line in result_str.splitlines():
                                 s0 = line.split()
                                 if "Y_" in s0[1]:
                                     Ystr = int(s0[3], 16)
                                     break
                             ttstr = []
-                            for line in resultstr.splitlines():
+                            for line in result_str.splitlines():
                                 s0 = line.split()
                                 isture = 0
                                 print(s0)

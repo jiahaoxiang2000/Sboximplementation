@@ -9,7 +9,7 @@ from itertools import combinations
 
 A = [[0 for i in range(256)] for j in range(8)]
 result = 0
-resultstr = 0
+result_str = 0
 
 cost = [
     ["0bin00001000", "0bin00000110",
@@ -264,7 +264,7 @@ def Objective(fout):
 
 def thread_func(threads, filestr):
     global result
-    global resultstr
+    global result_str
     order = "stp -p " + str(filestr) + ".cvc "  # > " + filestr + ".txt "
     # print(order)
     start_time = time.time()
@@ -401,14 +401,14 @@ if __name__ == '__main__':
                             # s=(os.popen(order))
                             # os.system(order)
                             s = (os.popen(order).read())
-                            resultstr = s
+                            result_str = s
                             print(s)
                             if "Invalid." in s:
                                 issolver = 1
                                 Astr = []
                                 AAstr = []
                                 Ystr = ""
-                                for line in resultstr.splitlines():
+                                for line in result_str.splitlines():
                                     s0 = line.split()
                                     if "Valid." in s0[0]:
                                         # MinGEC=MinGEC+1
@@ -419,7 +419,7 @@ if __name__ == '__main__':
                                         break
                                 ttstr = []
                                 GE = 0
-                                for line in resultstr.splitlines():
+                                for line in result_str.splitlines():
                                     s0 = line.split()
                                     isture = 0
                                     print(s0)
