@@ -296,11 +296,11 @@ def combination_impl(l, n, stack, length, SS):
 
 
 if __name__ == '__main__':
-    Cipherstr = "Xoodyak"
-    Sbox = [0, 5, 3, 2, 6, 1, 4, 7]  # PROST
-    GN = 5  # number of gates
-    GEC = 50  # number of gates
-    bit_num = 3
+    Cipherstr = "Craft"
+    Sbox = [12, 10, 13, 3, 14, 11, 15, 7, 8, 9, 1, 5, 0, 2, 4, 6]  # Craft
+    GN = 10  # number of gates
+    GEC = 60  # number of gates
+    bit_num = 4
     lg = []  # logic gate constraint
     scl = 0  # process library select
     dup = 2  # start depth
