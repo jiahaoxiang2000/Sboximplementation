@@ -12,6 +12,8 @@ STP is a constraint solver (or SMT solver) aimed at solving constraints of bitve
 
 os : deepin community v20
 
+Note: some version need compile dependence lib e.g. cryptominisat 
+
 ```
 sudo apt-get install git cmake bison flex libboost-all-dev python2 perl
 git clone https://github.com/stp/stp
