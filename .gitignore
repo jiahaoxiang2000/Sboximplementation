@@ -6,6 +6,7 @@
 /BGC/bgc
 /MC/*mc
 /GEC/gec
+/gec
 
 ### Python template
 # Byte-compiled / optimized / DLL files

@@ -12,31 +12,83 @@ result = 0
 A = [[0 for i in range(256)] for i in range(8)]
 # 0  UMC 180nm 1 SMIC 130nm
 cost = [
-    ["0bin00001000", "0bin00000110",
-     "0bin00000100", "0bin00000011",
-     "0bin00000100", "0bin00000011",
-     "0bin00000010", "0bin00000010",
-     "0bin00000010", "0bin00001110",
-     "0bin00001110", "0bin00000110",
-     "0bin00000100", "0bin00000110",
-     "0bin00000100", "0bin00001000",
-     "0bin00000110"],
-    ["0bin00001000", "0bin00001000",
-     "0bin00000101", "0bin00000011",
-     "0bin00000101", "0bin00000011",
-     "0bin00000011", "0bin00000011",
-     "0bin00000011", "0bin00010010",
-     "0bin00010011", "0bin00000110",
-     "0bin00000110", "0bin00000110",
-     "0bin00000110", "0bin00001000",
-     "0bin00001000"]
+    [
+        "0bin00001000",
+        "0bin00000110",
+        "0bin00000100",
+        "0bin00000011",
+        "0bin00000100",
+        "0bin00000011",
+        "0bin00000010",
+        "0bin00000010",
+        "0bin00000010",
+        "0bin00001110",
+        "0bin00001110",
+        "0bin00000110",
+        "0bin00000100",
+        "0bin00000110",
+        "0bin00000100",
+        "0bin00001000",
+        "0bin00000110",
+    ],
+    [
+        "0bin00001000",
+        "0bin00001000",
+        "0bin00000101",
+        "0bin00000011",
+        "0bin00000101",
+        "0bin00000011",
+        "0bin00000011",
+        "0bin00000011",
+        "0bin00000011",
+        "0bin00010010",
+        "0bin00010011",
+        "0bin00000110",
+        "0bin00000110",
+        "0bin00000110",
+        "0bin00000110",
+        "0bin00001000",
+        "0bin00001000",
+    ],
 ]  # the GE of different library
-Gatetype = ["XOR", "XNOR", "AND", "NAND", "OR", "NOR", "NOT", "NOT", "NOT", "XOR3", "XNOR3",
-            "AND3", "NAND3", "OR3", "NOR3", "MAOI1", "MOAI1"]
-GateVal = ["0bin00000010", "0bin00000011", "0bin00000100", "0bin00000101", "0bin00000110",
-           "0bin00000111", "0bin00001001", "0bin00001011", "0bin00010001", "0bin00010010",
-           "0bin00010011", "0bin00100000", "0bin00100001", "0bin01110110", "0bin01110111",
-           "0bin10110000", "0bin10110001"]
+Gatetype = [
+    "XOR",
+    "XNOR",
+    "AND",
+    "NAND",
+    "OR",
+    "NOR",
+    "NOT",
+    "NOT",
+    "NOT",
+    "XOR3",
+    "XNOR3",
+    "AND3",
+    "NAND3",
+    "OR3",
+    "NOR3",
+    "MAOI1",
+    "MOAI1",
+]
+GateVal = [
+    "0bin00000010",
+    "0bin00000011",
+    "0bin00000100",
+    "0bin00000101",
+    "0bin00000110",
+    "0bin00000111",
+    "0bin00001001",
+    "0bin00001011",
+    "0bin00010001",
+    "0bin00010010",
+    "0bin00010011",
+    "0bin00100000",
+    "0bin00100001",
+    "0bin01110110",
+    "0bin01110111",
+    "0bin10110000",
+    "0bin10110001",
+]
 
 
 def tobits(num, bit_len):
@@ -52,43 +104,43 @@ def State_Variate(fout, bitnum, Size, GateNum, QNum, scl):
     # State Variate
     # x
     for i in range(bitnum):
-        fout.write('X_' + str(i))
-        if (i == bitnum - 1):
+        fout.write("X_" + str(i))
+        if i == bitnum - 1:
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
         else:
             fout.write(" , ")
     # y
     for i in range(bitnum):
         fout.write("Y_" + str(i))
-        if (i == bitnum - 1):
+        if i == bitnum - 1:
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
         else:
             fout.write(" , ")
     # t
     for t in range(GateNum):
         fout.write("T_" + str(t))
-        if (t == GateNum - 1):
+        if t == GateNum - 1:
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
         else:
             fout.write(" , ")
     # q
     for i in range(QNum):
         fout.write("Q_" + str(i))
-        if (i == QNum - 1):
+        if i == QNum - 1:
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
         else:
             fout.write(" , ")
     # B
     for i in range(GateNum):
         fout.write("B_" + str(i))
-        if (i == GateNum - 1):
+        if i == GateNum - 1:
             fout.write(" : BITVECTOR( " + str(8) + " );\n")
         else:
             fout.write(" , ")
     # C
     for i in range(GateNum):
         fout.write("C_" + str(i))
-        if (i == GateNum - 1):
+        if i == GateNum - 1:
             fout.write(" : BITVECTOR( " + str(8) + " );\n")
         else:
             fout.write(" , ")
@@ -153,15 +205,28 @@ def Trival_Constraint(fout, bitnum, Size, GateNum, Sbox, lg):
             fout.write("ASSERT(")
             for i0 in range(len(lg)):
                 if lg[i0] in Gatetype:
-                    fout.write("( B_" + str(i) + "=" + GateVal[Gatetype.index(lg[i0])] + ")")
+                    fout.write(
+                        "( B_" + str(i) + "=" + GateVal[Gatetype.index(lg[i0])] + ")"
+                    )
                     if i0 < len(lg) - 1:
                         fout.write(" OR ")
             fout.write(");\n")
         else:
-            fout.write("ASSERT( (B_" + str(i) + "[7:3] = 0bin00000) OR (B_" +
-                       str(i) + "[7:2] = 0bin000010) OR (B_" + str(i) + "[7:2] = 0bin000100) OR (B_" +
-                       str(i) + "[7:1] = 0bin0111011) OR (B_" + str(i) + "[7:1] = 0bin0010000) OR (B_" +
-                       str(i) + "[7:1] = 0bin1011000) );\n")
+            fout.write(
+                "ASSERT( (B_"
+                + str(i)
+                + "[7:3] = 0bin00000) OR (B_"
+                + str(i)
+                + "[7:2] = 0bin000010) OR (B_"
+                + str(i)
+                + "[7:2] = 0bin000100) OR (B_"
+                + str(i)
+                + "[7:1] = 0bin0111011) OR (B_"
+                + str(i)
+                + "[7:1] = 0bin0010000) OR (B_"
+                + str(i)
+                + "[7:1] = 0bin1011000) );\n"
+            )
 
 
 def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, Bsum):
@@ -174,14 +239,14 @@ def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, Bsum):
                 fout.write("ASSERT( ")
                 for i in range(bitnum):
                     fout.write("( Q_" + str(countQ) + " = X_" + str(i) + ")")
-                    if (depth == 0 and Tsum == 0 and i == bitnum - 1):
+                    if depth == 0 and Tsum == 0 and i == bitnum - 1:
                         fout.write(" );\n")
                     else:
                         fout.write(" OR ")
 
                 for i in range(Tsum):
                     fout.write("( Q_" + str(countQ) + " = T_" + str(i) + ")")
-                    if (i == Tsum - 1):
+                    if i == Tsum - 1:
                         fout.write(" );\n")
                     else:
                         fout.write(" OR ")
@@ -191,7 +256,7 @@ def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, Bsum):
 
                 for i in range(Tsum):
                     fout.write("( Q_" + str(countQ) + " = T_" + str(i) + ")")
-                    if (i == Tsum - 1):
+                    if i == Tsum - 1:
                         fout.write(" );\n")
                     else:
                         fout.write(" OR ")
@@ -202,23 +267,82 @@ def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, Bsum):
             xx0 = xx0 + "0"
             xx1 = xx1 + "1"
         # encoding T
-        fout.write("ASSERT( T_" + str(countT) + " = BVXOR((IF B_" + str(countB) + "[7:7] = 0bin1 THEN ~(Q_" + str(
-            countQ - 4) + "&Q_" +
-                   str(countQ - 3) + ")& ~Q_" + str(countQ - 2) + "& Q_" + str(countQ - 1) + " ELSE " + xx0 +
-                   " ENDIF ), BVXOR((IF B_" + str(countB) + "[6:6] = 0bin1 THEN Q_" + str(countQ - 2) +
-                   " & BVXOR(Q_" + str(countQ - 4) + ", Q_" + str(countQ - 3) + ") ELSE " + xx0 +
-                   " ENDIF), BVXOR((IF B_" + str(countB) + "[5:5] = 0bin1 THEN Q_" + str(countQ - 4) + " & Q_" +
-                   str(countQ - 3) + " & Q_" + str(countQ - 2) + " ELSE  " + xx0 + " ENDIF)"
-                   + ", BVXOR((IF B_" + str(countB) + "[4:4] = 0bin1 THEN Q_" + str(
-            countQ - 2) + " ELSE " + xx0 + " ENDIF)"
-                   + ", BVXOR((IF B_" + str(countB) + "[3:3] = 0bin1 THEN Q_" + str(
-            countQ - 3) + " ELSE " + xx0 + " ENDIF)"
-                   + ", BVXOR((IF B_" + str(countB) + "[2:2] = 0bin1 THEN Q_" + str(countQ - 4) + "& Q_" + str(
-            countQ - 3) + " ELSE " + xx0 + " ENDIF )"
-                   + ", BVXOR((IF B_" + str(countB) + "[1:1] = 0bin1 THEN BVXOR(Q_" + str(countQ - 4) + ",Q_" + str(
-            countQ - 3) + ") ELSE " + xx0 + " ENDIF )"
-                   + ", (IF B_" + str(
-            countB) + "[0:0] = 0bin1 THEN " + xx1 + " ELSE " + xx0 + " ENDIF))))))))); \n")
+        fout.write(
+            "ASSERT( T_"
+            + str(countT)
+            + " = BVXOR((IF B_"
+            + str(countB)
+            + "[7:7] = 0bin1 THEN ~(Q_"
+            + str(countQ - 4)
+            + "&Q_"
+            + str(countQ - 3)
+            + ")& ~Q_"
+            + str(countQ - 2)
+            + "& Q_"
+            + str(countQ - 1)
+            + " ELSE "
+            + xx0
+            + " ENDIF ), BVXOR((IF B_"
+            + str(countB)
+            + "[6:6] = 0bin1 THEN Q_"
+            + str(countQ - 2)
+            + " & BVXOR(Q_"
+            + str(countQ - 4)
+            + ", Q_"
+            + str(countQ - 3)
+            + ") ELSE "
+            + xx0
+            + " ENDIF), BVXOR((IF B_"
+            + str(countB)
+            + "[5:5] = 0bin1 THEN Q_"
+            + str(countQ - 4)
+            + " & Q_"
+            + str(countQ - 3)
+            + " & Q_"
+            + str(countQ - 2)
+            + " ELSE  "
+            + xx0
+            + " ENDIF)"
+            + ", BVXOR((IF B_"
+            + str(countB)
+            + "[4:4] = 0bin1 THEN Q_"
+            + str(countQ - 2)
+            + " ELSE "
+            + xx0
+            + " ENDIF)"
+            + ", BVXOR((IF B_"
+            + str(countB)
+            + "[3:3] = 0bin1 THEN Q_"
+            + str(countQ - 3)
+            + " ELSE "
+            + xx0
+            + " ENDIF)"
+            + ", BVXOR((IF B_"
+            + str(countB)
+            + "[2:2] = 0bin1 THEN Q_"
+            + str(countQ - 4)
+            + "& Q_"
+            + str(countQ - 3)
+            + " ELSE "
+            + xx0
+            + " ENDIF )"
+            + ", BVXOR((IF B_"
+            + str(countB)
+            + "[1:1] = 0bin1 THEN BVXOR(Q_"
+            + str(countQ - 4)
+            + ",Q_"
+            + str(countQ - 3)
+            + ") ELSE "
+            + xx0
+            + " ENDIF )"
+            + ", (IF B_"
+            + str(countB)
+            + "[0:0] = 0bin1 THEN "
+            + xx1
+            + " ELSE "
+            + xx0
+            + " ENDIF))))))))); \n"
+        )
         countB += 1
         countT += 1
 
@@ -237,7 +361,7 @@ def Logic_Constraint(fout, bitnum, Size, GateNum, MinGEC, depth, SS):
         fout.write("ASSERT( ")
         for i in range(GateNum):
             fout.write("( Y_" + str(y) + " =  T_" + str(i))
-            if (i == GateNum - 1):
+            if i == GateNum - 1:
                 fout.write("));\n")
             else:
                 fout.write(" ) OR ")
@@ -245,10 +369,10 @@ def Logic_Constraint(fout, bitnum, Size, GateNum, MinGEC, depth, SS):
         fout.write("ASSERT( C_" + str(i) + " = Cost[ B_" + str(i) + "] );\n")
 
     for i in range(GateNum):
-        if (i == 0):
+        if i == 0:
             fout.write("ASSERT( GEC = BVPLUS( 8 , ")
         fout.write("C_" + str(i))
-        if (i == GateNum - 1):
+        if i == GateNum - 1:
             fout.write(" ) );\n")
         else:
             fout.write(" , ")
@@ -262,16 +386,18 @@ def Objective(fout):
 def thread_func(threads, file):
     global result
     global result_str
-    order = "stp -p " + str(file) + ".cvc --cryptominisat --threads 20 > " + file + ".txt "
+    order = (
+        "stp -p " + str(file) + ".cvc --cryptominisat --threads 20 > " + file + ".txt "
+    )
     start_time = time.time()
-    s = (os.popen(order).read())
+    s = os.popen(order).read()
     print(s)
     result_str = s
     end_time = time.time()
 
     if result == 0:
         result = 1
-        fouts = open(file_str + ".txt", 'w')
+        fouts = open(file_str + ".txt", "w")
         result_str = s
         fouts.write(s)
         fouts.write("time:" + str((end_time - start_time) * 1000))
@@ -295,15 +421,15 @@ def combination_impl(l, n, stack, length, SS):
             break
 
 
-if __name__ == '__main__':
-    Cipherstr = "Craft"
-    Sbox = [12, 10, 13, 3, 14, 11, 15, 7, 8, 9, 1, 5, 0, 2, 4, 6]  # Craft
-    GN = 10  # number of gates
-    GEC = 60  # number of gates
+if __name__ == "__main__":
+    Cipherstr = "unknown"
+    Sbox = [12, 10, 13, 3, 14, 11, 15, 7, 8, 9, 1, 5, 0, 2, 4, 6]  # unknown
+    GN = 20  # number of gates
+    GEC = 66  # number of GEC
     bit_num = 4
-    lg = []  # logic gate constraint
+    lg = ["XOR", "XNOR", "AND", "NAND", "OR", "NOR", "NOT"]  # logic gate constraint
     scl = 0  # process library select
-    dup = 2  # start depth
+    dup = 3  # start depth
     design = 1  # depth
     for GateNum in range(GN, 1, -1):
         Size = pow(2, bit_num)
@@ -333,13 +459,13 @@ if __name__ == '__main__':
                         break
                     gx = gs + gx - SS[len(SS) - sd - 1]
                     gs = 2 * SS[len(SS) - sd - 1]
-                if (ff):
+                if ff:
                     SStr0.append(SS)
             is_has_solver = 0
-            print(f'SStr0 : {SStr0}')
+            print(f"SStr0 : {SStr0}")
             for d in range(len(SStr0)):
                 SS = SStr0[d]
-                print(f'SS : {SS}')
+                print(f"SS : {SS}")
                 sz = ""
                 for dd in range(len(SS)):
                     sz = sz + str(SS[dd])
@@ -349,9 +475,17 @@ if __name__ == '__main__':
                 if not os.path.exists("./gec/" + Cipherstr):
                     os.system("mkdir ./gec/" + Cipherstr)
 
-                file_str = "./gec/" + Cipherstr + "/" + Cipherstr + "_d_" + str(
-                    depth) + "_" + sz  # encoding modle to file
-                f_out = open(file_str + "_0.cvc", 'w')
+                file_str = (
+                    "./gec/"
+                    + Cipherstr
+                    + "/"
+                    + Cipherstr
+                    + "_d_"
+                    + str(depth)
+                    + "_"
+                    + sz
+                )  # encoding modle to file
+                f_out = open(file_str + "_0.cvc", "w")
                 State_Variate(f_out, bit_num, Size, GateNum, QNum, scl)
                 Trival_Constraint(f_out, bit_num, Size, GateNum, Sbox, lg)
                 Logic_Constraint(f_out, bit_num, Size, GateNum, MinGEC, depth, SS)
@@ -359,20 +493,22 @@ if __name__ == '__main__':
                 f_out.close()
                 # x = 1
                 # while (x):
-                order = "stp -p " + str(file_str) + "_0.cvc  --cryptominisat --threads 20"  # > "+file+".txt "
+                order = (
+                    "stp -p " + str(file_str) + "_0.cvc  --cryptominisat --threads 32"
+                )  # > "+file+".txt "
                 # print(order)
                 start_time = time.time()
                 # print(i,start_time)
                 # s=(os.popen(order))
                 # os.system(order)
-                s = (os.popen(order).read())
+                s = os.popen(order).read()
                 end_time = time.time()
                 result_str = s
                 print(s)
                 if "Invalid." in s:
-                    print(file_str, (end_time - start_time) * 1000, 'ms')
+                    print(file_str, (end_time - start_time) * 1000, "ms")
                     s = s + str((end_time - start_time) * 1000)
-                    f_out_c = open(file_str + ".txt", 'a+')
+                    f_out_c = open(file_str + ".txt", "a+")
                     f_out_c.write(s)
                     f_out_c.close()
 

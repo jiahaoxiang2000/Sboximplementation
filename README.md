@@ -10,12 +10,13 @@ STP is a constraint solver (or SMT solver) aimed at solving constraints of bitve
 * Docker image:  `docker pull msoos/stp`
 ---
 
-os : deepin community v20
+os : ubuntu 22.04
 
-Note: some version need compile dependence lib e.g. cryptominisat 
+Note: some version need compile dependence lib e.g. minisat cryptominisat
 
-```
-sudo apt-get install git cmake bison flex libboost-all-dev python2 perl
+
+``` bash
+sudo apt-get install cmake bison flex libboost-all-dev python-is-python3 perl 
 git clone https://github.com/stp/stp
 cd stp
 git submodule init && git submodule update
@@ -26,6 +27,7 @@ git submodule init && git submodule update
 mkdir build
 cd build
 cmake ..
-cmake --build .
+cmake --build . 
 sudo cmake --install .
+command -v ldconfig && sudo ldconfig
 ```
