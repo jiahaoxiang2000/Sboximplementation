@@ -427,7 +427,7 @@ if __name__ == "__main__":
     GN = 20  # number of gates
     GEC = 66  # number of GEC
     bit_num = 4
-    lg = ["XOR", "XNOR", "AND", "NAND", "OR", "NOR", "NOT"]  # logic gate constraint
+    lg = ["XNOR", "NAND", "NOR", "NOT"]  # logic gate constraint
     scl = 0  # process library select
     dup = 3  # start depth
     design = 1  # depth
