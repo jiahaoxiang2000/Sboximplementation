@@ -7,6 +7,7 @@
 /MC/*mc
 /GEC/gec
 /gec
+*.out
 
 ### Python template
 # Byte-compiled / optimized / DLL files

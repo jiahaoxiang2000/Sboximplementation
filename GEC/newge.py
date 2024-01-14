@@ -423,7 +423,7 @@ def combination_impl(l, n, stack, length, SS):
 
 if __name__ == "__main__":
     Cipherstr = "unknown"
-    Sbox = [12, 10, 13, 3, 14, 11, 15, 7, 8, 9, 1, 5, 0, 2, 4, 6]  # unknown
+    Sbox = [1, 0, 4, 6, 2, 14, 3, 10, 9, 8, 7, 12, 11, 15, 5, 13]  # unknown
     GN = 20  # number of gates
     GEC = 66  # number of GEC
     bit_num = 4
