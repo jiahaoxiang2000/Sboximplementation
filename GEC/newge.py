@@ -424,10 +424,10 @@ def combination_impl(l, n, stack, length, SS):
 if __name__ == "__main__":
     Cipherstr = "unknown"
     Sbox = [1, 0, 4, 6, 2, 14, 3, 10, 9, 8, 7, 12, 11, 15, 5, 13]  # unknown
-    GN = 20  # number of gates
+    GN = 22  # number of gates
     GEC = 66  # number of GEC
     bit_num = 4
-    lg = ["XNOR", "NAND", "NOR", "NOT"]  # logic gate constraint
+    lg = ["XNOR", "NAND", "NOR", "NOT","AND"]  # logic gate constraint
     scl = 0  # process library select
     dup = 3  # start depth
     design = 1  # depth
