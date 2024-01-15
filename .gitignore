@@ -7,6 +7,7 @@
 /MC/*mc
 /GEC/gec
 /gec
+/bgc
 *.out
 
 ### Python template
