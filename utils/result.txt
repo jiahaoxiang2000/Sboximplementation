@@ -1,0 +1,36 @@
+ASSERT( Q_13 = 0x3C );
+ASSERT( Q_4 = 0x33 );
+ASSERT( X_2 = 0x55 );
+ASSERT( T_5 = 0x77 );
+ASSERT( Q_0 = 0x0F );
+ASSERT( Q_1 = 0x33 );
+ASSERT( Q_2 = 0x55 );
+ASSERT( B_2 = 0x04 );
+ASSERT( Q_5 = 0x3C );
+ASSERT( Q_6 = 0x55 );
+ASSERT( Q_7 = 0x30 );
+ASSERT( Q_8 = 0x05 );
+ASSERT( Q_12 = 0x77 );
+ASSERT( Q_3 = 0x0F );
+ASSERT( X_0 = 0x0F );
+ASSERT( T_2 = 0x30 );
+ASSERT( T_1 = 0x05 );
+ASSERT( B_0 = 0x02 );
+ASSERT( Y_0 = 0x4B );
+ASSERT( X_1 = 0x33 );
+ASSERT( B_5 = 0x06 );
+ASSERT( Q_10 = 0x55 );
+ASSERT( Y_1 = 0x39 );
+ASSERT( B_6 = 0x02 );
+ASSERT( B_4 = 0x02 );
+ASSERT( T_6 = 0x4B );
+ASSERT( B_3 = 0x02 );
+ASSERT( T_4 = 0x39 );
+ASSERT( B_1 = 0x04 );
+ASSERT( T_3 = 0x65 );
+ASSERT( T_0 = 0x3C );
+ASSERT( Q_9 = 0x3C );
+ASSERT( Q_11 = 0x33 );
+ASSERT( Y_2 = 0x65 );
+Invalid.
+081.35557174682617
