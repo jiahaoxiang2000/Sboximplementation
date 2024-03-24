@@ -193,7 +193,7 @@ def Objective(fout):
 def thread_func(threads, filestr, i):
     global result
     order = (
-        "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 20"
+        "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 26"
     )  # > " + filestr + ".txt "
     # print(order)
     argument = []
@@ -239,8 +239,8 @@ def combination_impl(l, n, stack, length, SS):
 if __name__ == "__main__":
     result = 0
     Cipherstr = "qarmav2"
-    Sbox = [4, 7, 9, 11, 12, 6, 14, 15, 0, 5, 1, 13, 8, 3, 2, 10]  # PROST
-    BGC = 10  # number of gates
+    Sbox = [4, 7, 9, 11, 12, 6, 14, 15, 0, 5, 1, 13, 8, 3, 2, 10]  # qarmav2
+    BGC = 15  # number of gates
     bitnum = 4  # 4
     SsIndex = 4  # depth
     p = 1  # parallel signd
