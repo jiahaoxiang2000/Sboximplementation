@@ -243,7 +243,7 @@ if __name__ == "__main__":
     BGC = 16  # number of gates
     bitnum = 4  # 4
     SsIndex = 5  # depth
-    p = 1  # parallel signd
+    p = 0  # parallel signd
 
     for GateNum in range(BGC, BGC - 1, -1):
         result = 0
