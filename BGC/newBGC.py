@@ -240,9 +240,9 @@ if __name__ == "__main__":
     result = 0
     Cipherstr = "qarmav2"
     Sbox = [4, 7, 9, 11, 12, 6, 14, 15, 0, 5, 1, 13, 8, 3, 2, 10]  # qarmav2
-    BGC = 15  # number of gates
+    BGC = 16  # number of gates
     bitnum = 4  # 4
-    SsIndex = 4  # depth
+    SsIndex = 5  # depth
     p = 1  # parallel signd
 
     for GateNum in range(BGC, BGC - 1, -1):
