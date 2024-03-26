@@ -240,7 +240,7 @@ if __name__ == "__main__":
     result = 0
     Cipherstr = "qarmav2"
     Sbox = [4, 7, 9, 11, 12, 6, 14, 15, 0, 5, 1, 13, 8, 3, 2, 10]  # qarmav2
-    BGC = 14  # number of gates
+    BGC = 20  # number of gates
     bitnum = 4  # 4
     SsIndex = 5  # depth
     p = 0  # parallel signd
