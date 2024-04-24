@@ -422,14 +422,31 @@ def combination_impl(l, n, stack, length, SS):
 
 
 if __name__ == "__main__":
-    Cipherstr = "unknown"
-    Sbox = [1, 0, 4, 6, 2, 14, 3, 10, 9, 8, 7, 12, 11, 15, 5, 13]  # unknown
-    GN = 22  # number of gates
-    GEC = 66  # number of GEC
+    Cipherstr = "HLTF"
+    Sbox = [
+        0xC,
+        0xA,
+        0x7,
+        0xD,
+        0xE,
+        0xB,
+        0xF,
+        0x2,
+        0x9,
+        0x8,
+        0x1,
+        0x5,
+        0x0,
+        0x3,
+        0x4,
+        0x6,
+    ]  # unknown
+    GN = 10  # number of gates
+    GEC = 60  # number of GEC
     bit_num = 4
-    lg = ["XNOR", "NAND", "NOR", "NOT","AND"]  # logic gate constraint
+    lg = []  # logic gate constraint
     scl = 0  # process library select
-    dup = 3  # start depth
+    dup = 2  # start depth
     design = 1  # depth
     for GateNum in range(GN, 1, -1):
         Size = pow(2, bit_num)
@@ -494,7 +511,7 @@ if __name__ == "__main__":
                 # x = 1
                 # while (x):
                 order = (
-                    "stp -p " + str(file_str) + "_0.cvc  --cryptominisat --threads 32"
+                    "stp -p " + str(file_str) + "_0.cvc  --cryptominisat --threads 28"
                 )  # > "+file+".txt "
                 # print(order)
                 start_time = time.time()

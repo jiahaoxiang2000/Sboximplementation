@@ -34,26 +34,26 @@ def State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS):
     """
     # State Variate
     for i in range(bitnum):
-        fout.write('X_' + str(i))
-        if (i == bitnum - 1):
+        fout.write("X_" + str(i))
+        if i == bitnum - 1:
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
         else:
             fout.write(" , ")
     for i in range(bitnum):
         fout.write("Y_" + str(i))
-        if (i == bitnum - 1):
+        if i == bitnum - 1:
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
         else:
             fout.write(" , ")
     for t in range(GateNum):
         fout.write("T_" + str(t))
-        if (t == GateNum - 1):
+        if t == GateNum - 1:
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
         else:
             fout.write(" , ")
     for i in range(QNum):
         fout.write("Q_" + str(i))
-        if (i == QNum - 1):
+        if i == QNum - 1:
             fout.write(" : BITVECTOR( " + str(Size) + " );\n")
         else:
             fout.write(" , ")
@@ -65,9 +65,9 @@ def State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS):
         fout.write("A_" + str(i))
         if i == QNum + (bitnum * bitnum) - 1:
             fout.write(" : BITVECTOR( " + str((bitnum + GateNum)) + " );\n")
-        elif ((i + 1) % 2 == 0 and i < QNum):
+        elif (i + 1) % 2 == 0 and i < QNum:
             fout.write(" : BITVECTOR( " + str((bitnum + len0)) + " );\n")
-            if (2 * sum == i + 1):
+            if 2 * sum == i + 1:
                 len0 = len0 + +SS[star]
                 if star < len(SS) - 1:
                     sum = sum + SS[star + 1]
@@ -148,9 +148,17 @@ def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, lenght):
         for q in range(2):
             fout.write("ASSERT(  Q_" + str(countQ) + " = ")
             for i in range(bitnum + 1):
-                x = "( IF A_" + str(countQ) + "[" + str(lenght - i) + ":" + str(lenght - i) + "]=0bin1 THEN "
+                x = (
+                    "( IF A_"
+                    + str(countQ)
+                    + "["
+                    + str(lenght - i)
+                    + ":"
+                    + str(lenght - i)
+                    + "]=0bin1 THEN "
+                )
                 xx = ""
-                if (i != 0):
+                if i != 0:
                     x = x + " X_" + str(i - 1)
                 else:
                     xx = "0bin"
@@ -162,29 +170,44 @@ def Logic_SubConstraint(fout, bitnum, Size, GateNum, Qsum, Tsum, depth, lenght):
                     xx = xx + str(0)
                 x = x + xx
                 x = x + " ENDIF )"
-                if (depth == 0 and i == bitnum):
+                if depth == 0 and i == bitnum:
                     fout.write(x)
                 else:
                     fout.write("BVXOR( " + str(x) + ", ")
             for i in range(Tsum):
-                x = "( IF A_" + str(countQ) + "[" + str(lenght - bitnum - 1 - i) + ":" + str(
-                    lenght - bitnum - 1 - i) + "]=0bin0 THEN  0bin"
+                x = (
+                    "( IF A_"
+                    + str(countQ)
+                    + "["
+                    + str(lenght - bitnum - 1 - i)
+                    + ":"
+                    + str(lenght - bitnum - 1 - i)
+                    + "]=0bin0 THEN  0bin"
+                )
                 xx = ""
                 for j in range(Size):
                     xx = xx + str(0)
                 x = x + xx + " ELSE T_" + str(i) + " ENDIF)"
-                if (i == Tsum - 1):
+                if i == Tsum - 1:
                     fout.write(x)
                 else:
                     fout.write("BVXOR( " + str(x) + ", ")
             for i in range(bitnum + Tsum + 1):
-                if (i == bitnum + Tsum):
+                if i == bitnum + Tsum:
                     fout.write(" );\n")
                 else:
                     fout.write(" )")
             countQ = countQ + 1
         # print("T_" + str(countT) + " = Q_" + str(countQ - 2) + " & Q_" + str(countQ - 1) )
-        fout.write("ASSERT( T_" + str(countT) + " = Q_" + str(countQ - 2) + " & Q_" + str(countQ - 1) + " );\n")
+        fout.write(
+            "ASSERT( T_"
+            + str(countT)
+            + " = Q_"
+            + str(countQ - 2)
+            + " & Q_"
+            + str(countQ - 1)
+            + " );\n"
+        )
         countT += 1
 
 
@@ -220,25 +243,40 @@ def Logic_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, depth, SS):
     for y in range(bitnum):
         fout.write("ASSERT(  Y_" + str(y) + " = ")
         for i in range(bitnum):
-            x = "( IF A_" + str(countQ) + "[" + str(bitnum + countT - 1 - i) + ":" + str(
-                bitnum + countT - 1 - i) + "]=0bin0 THEN 0bin"
+            x = (
+                "( IF A_"
+                + str(countQ)
+                + "["
+                + str(bitnum + countT - 1 - i)
+                + ":"
+                + str(bitnum + countT - 1 - i)
+                + "]=0bin0 THEN 0bin"
+            )
             xx = ""
             for j in range(Size):
                 xx = xx + str(0)
             x = x + xx + " ELSE  X_" + str(i) + " ENDIF )"
             fout.write("BVXOR( " + x + ", ")
         for i in range(GateNum):
-            x = "( IF A_" + str(countQ) + "[" + str(countT - 1 - i) + ":" + str(countT - 1 - i) + "]=0bin0 THEN  0bin"
+            x = (
+                "( IF A_"
+                + str(countQ)
+                + "["
+                + str(countT - 1 - i)
+                + ":"
+                + str(countT - 1 - i)
+                + "]=0bin0 THEN  0bin"
+            )
             xx = ""
             for j in range(Size):
                 xx = xx + str(0)
             x = x + xx + " ELSE T_" + str(i) + " ENDIF )"
-            if (i == GateNum - 1):
+            if i == GateNum - 1:
                 fout.write(x)
             else:
                 fout.write("BVXOR( " + x + ", ")
         for i in range(bitnum + countT):
-            if (i == bitnum + countT - 1):
+            if i == bitnum + countT - 1:
                 fout.write(" );\n")
             else:
                 fout.write(" )")
@@ -281,13 +319,13 @@ def time_stamp1():
 def thread_func(threads, filestr):
     global result
     global result_str
-    order = "stp -p " + str(filestr) + ".cvc --cryptominisat --threads 18"  # > "+file+".txt "
+    order = "stp -p " + str(filestr) + ".cvc  --threads 18"  # > "+file+".txt "
     # print(order)
     start_time = time.time()
     # print(i,start_time)
     # s=(os.popen(order))
     # os.system(order)
-    s = (os.popen(order).read())
+    s = os.popen(order).read()
     resultstr = s
     end_time = time.time()
     # for t in threads:
@@ -298,10 +336,10 @@ def thread_func(threads, filestr):
     # print(filestr)
     if "Invalid." in s:
         # print(filestr,(end_time-start_time)*1000,'ms')
-        fouts = open(filestr + ".txt", 'w')
+        fouts = open(filestr + ".txt", "w")
         # resultstr=s
         fouts.write(s)
-        fouts.write("time:" + str((end_time - start_time) * 1000) + 'ms')
+        fouts.write("time:" + str((end_time - start_time) * 1000) + "ms")
         fouts.close()
 
 
@@ -323,7 +361,7 @@ def combination_impl(l, n, stack, length, SS):
             break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     Cipherstr = "Xoodyak"  # ciphername
     Sbox = [0, 5, 3, 2, 6, 1, 4, 7]  # PROST# S-box
     MC = 3  # number of AND gates
@@ -369,14 +407,23 @@ if __name__ == '__main__':
                 sz = ""
                 for dd in range(len(SS)):
                     sz = sz + str(SS[dd])
-                print(f'SS {SS}')
+                print(f"SS {SS}")
 
                 if not os.path.exists("./mc"):
                     os.system("mkdir ./mc")
                 if not os.path.exists("./mc/" + Cipherstr):
                     os.system("mkdir ./mc/" + Cipherstr)
-                filestr = "./mc/" + Cipherstr + "/" + Cipherstr + "newmc_D" + str(depth) + '_' + sz
-                fout = open(filestr + "_0.cvc", 'w')
+                filestr = (
+                    "./mc/"
+                    + Cipherstr
+                    + "/"
+                    + Cipherstr
+                    + "newmc_D"
+                    + str(depth)
+                    + "_"
+                    + sz
+                )
+                fout = open(filestr + "_0.cvc", "w")
 
                 State_Variate(fout, bitnum, Size, GateNum, QNum, bNum, SS)
                 Trival_Constraint(fout, bitnum, Size, GateNum, QNum, bNum, Sbox)
@@ -385,19 +432,33 @@ if __name__ == '__main__':
 
                 fout.close()
 
-                fout0 = open(filestr + "_1.cvc", 'w')
-                fout1 = open(filestr + "_2.cvc", 'w')
+                fout0 = open(filestr + "_1.cvc", "w")
+                fout1 = open(filestr + "_2.cvc", "w")
                 # fout2=open(filestr + ".txt", 'w')
 
                 # let the same Q_i not be input of one gate
                 b0str = ""
                 b1str = ""
                 for j in range(0, QNum, 2):
-                    b0str = b0str + "ASSERT( BVGT(A_" + str(j) + ", A_" + str(j + 1) + "));\n"
-                    b1str = b1str + "ASSERT( BVGT(A_" + str(j + 1) + ", A_" + str(j) + "));\n"
+                    b0str = (
+                        b0str
+                        + "ASSERT( BVGT(A_"
+                        + str(j)
+                        + ", A_"
+                        + str(j + 1)
+                        + "));\n"
+                    )
+                    b1str = (
+                        b1str
+                        + "ASSERT( BVGT(A_"
+                        + str(j + 1)
+                        + ", A_"
+                        + str(j)
+                        + "));\n"
+                    )
                 lines0 = []
                 lines = []
-                f = open(filestr + "_0.cvc", 'r')
+                f = open(filestr + "_0.cvc", "r")
                 s = ""
                 s0 = ""
                 for line in f:
@@ -405,8 +466,8 @@ if __name__ == '__main__':
                     lines0.append(line)
                 lines0.insert(4 + 2 * bitnum + GateNum, b0str)
                 lines.insert(4 + 2 * bitnum + GateNum, b1str)
-                s = ''.join(lines)
-                s0 = ''.join(lines0)
+                s = "".join(lines)
+                s0 = "".join(lines0)
                 f.close()
                 # fout0=open(filestr + ".cvc", 'w')
                 fout0.write(s0)
@@ -420,7 +481,13 @@ if __name__ == '__main__':
                 threads = []
                 # thread_func(filestr,filestr)
                 for j in range(0, 3):
-                    p = threading.Thread(target=thread_func, args=(threads, str(filestr) + '_' + str(j),))
+                    p = threading.Thread(
+                        target=thread_func,
+                        args=(
+                            threads,
+                            str(filestr) + "_" + str(j),
+                        ),
+                    )
                     threads.append(p)
                 # print(threads)
                 # p.start()
@@ -431,7 +498,7 @@ if __name__ == '__main__':
                     t.start()
                 x = 1
                 # print(result)
-                while (x):
+                while x:
                     # print(result)
                     xx = 0
                     # end_time = time.time()
@@ -462,7 +529,11 @@ if __name__ == '__main__':
                         res = os.popen(order).read()
                         for line in res.splitlines():
                             s = line.split()
-                            if filestr + "_0.cvc" in s or filestr + "_1.cvc" in s or filestr + "_2.cvc" in s:
+                            if (
+                                filestr + "_0.cvc" in s
+                                or filestr + "_1.cvc" in s
+                                or filestr + "_2.cvc" in s
+                            ):
                                 # print(s[1])
                                 r = os.popen("kill -9 " + s[1]).read()
                                 # print("---------------------")

@@ -12,11 +12,11 @@ STP is a constraint solver (or SMT solver) aimed at solving constraints of bitve
 
 os : ubuntu 22.04
 
-Note: some version need compile dependence lib e.g. minisat cryptominisat
+Note: some version need compile dependence lib e.g. minisat cryptominisat, yes, it`s not easy to use the stp. because the upstream dependence lib build will change, so the build script will change too. but this stp is slower. so maybe need more to do.
 
 
 ``` bash
-sudo apt-get install cmake bison flex libboost-all-dev python-is-python3 perl 
+sudo apt-get install cmake bison flex libboost-all-dev python-is-python3 perl  
 git clone https://github.com/stp/stp
 cd stp
 git submodule init && git submodule update
@@ -27,7 +27,7 @@ git submodule init && git submodule update
 mkdir build
 cd build
 cmake ..
-cmake --build . 
+cmake --build . -j 20
 sudo cmake --install .
 command -v ldconfig && sudo ldconfig
 ```
