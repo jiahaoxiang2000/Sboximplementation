@@ -422,22 +422,22 @@ def combination_impl(l, n, stack, length, SS):
 
 
 if __name__ == "__main__":
-    Cipherstr = "HLTF"
+    Cipherstr = "MIDORI_SB1"
     Sbox = [
-        0xC,
-        0xA,
+        0x1,
+        0x0,
+        0x5,
+        0x3,
+        0xE,
+        0x2,
+        0xF,
         0x7,
         0xD,
-        0xE,
-        0xB,
-        0xF,
-        0x2,
+        0xA,
         0x9,
+        0xB,
+        0xC,
         0x8,
-        0x1,
-        0x5,
-        0x0,
-        0x3,
         0x4,
         0x6,
     ]  # unknown
